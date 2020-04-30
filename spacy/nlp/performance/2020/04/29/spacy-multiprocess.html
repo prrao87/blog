@@ -172,14 +172,14 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#Define-text-cleaner">Define text cleaner </a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#Option-1.-Work-directly-on-the-data-using-pandas.Series.apply">Option 1. Work directly on the data using pandas.Series.apply </a></li>
-<li class="toc-entry toc-h2"><a href="#Option-2.-Use-nlp.pipe">Option 2. Use nlp.pipe </a></li>
-<li class="toc-entry toc-h2"><a href="#Option-3.-Parallelize-the-work-using-joblib">Option 3. Parallelize the work using joblib </a>
+<li class="toc-entry toc-h2"><a href="#Option-1:-Work-directly-on-the-data-using-pandas.Series.apply">Option 1: Work directly on the data using pandas.Series.apply </a></li>
+<li class="toc-entry toc-h2"><a href="#Option-2:-Use-nlp.pipe">Option 2: Use nlp.pipe </a></li>
+<li class="toc-entry toc-h2"><a href="#Option-3:-Parallelize-the-work-using-joblib">Option 3: Parallelize the work using joblib </a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#Effect-of-chunk-size-and-batch-size">Effect of chunk size and batch size </a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#Additional-points">Additional points </a></li>
+<li class="toc-entry toc-h2"><a href="#Additional-gains">Additional gains </a></li>
 <li class="toc-entry toc-h2"><a href="#Conclusions">Conclusions </a></li>
 </ul><!--
 #################################################
@@ -248,8 +248,8 @@ window.onload = wrap_img;
 <h2 id="Initial-steps">
 <a class="anchor" href="#Initial-steps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Initial steps<a class="anchor-link" href="#Initial-steps"> </a>
 </h2>
-<p>The news data is obtained by running the preprocessing notebook <code>./data/preprocessing.ipynb</code>, which processes the raw text file downloaded from Kaggle and performs some basic cleaning on it. This step generates a file <code>nytimes.tsv</code> that contains the tabular data (stored as <code>nytimes.tsv</code>). A curated stopword file is also provided in <code>./data/stopwords</code>.</p>
-<p>Additionally, during initial testing, we can limit the size of the DataFrame being worked on (to around $2000$ samples) for faster execution. For the final run, disable the limit by setting it to zero.</p>
+<p>The news data is obtained by running the preprocessing notebook <code>./data/preprocessing.ipynb</code>, which processes the raw text file downloaded from Kaggle and performs some basic cleaning on it. This step generates a file that contains the tabular data (stored as <code>nytimes.tsv</code>). A curated stopword file is also provided in <code>./data/stopwords</code>.</p>
+<p>Additionally, during initial testing, we can limit the size of the DataFrame being worked on (to a subset of the total number of articles) for faster execution. For the final run, disable the limit by setting it to zero.</p>
 
 </div>
 </div>
@@ -581,8 +581,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Option-1.-Work-directly-on-the-data-using-pandas.Series.apply">
-<a class="anchor" href="#Option-1.-Work-directly-on-the-data-using-pandas.Series.apply" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 1. Work directly on the data using <code>pandas.Series.apply</code><a class="anchor-link" href="#Option-1.-Work-directly-on-the-data-using-pandas.Series.apply"> </a>
+<h2 id="Option-1:-Work-directly-on-the-data-using-pandas.Series.apply">
+<a class="anchor" href="#Option-1:-Work-directly-on-the-data-using-pandas.Series.apply" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 1: Work directly on the data using <code>pandas.Series.apply</code><a class="anchor-link" href="#Option-1:-Work-directly-on-the-data-using-pandas.Series.apply"> </a>
 </h2>
 <p>The straightforward way to process this text is to use an existing method, in this case the <code>lemmatize</code> method shown below, and apply it to the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the DataFrame. Lemmatization is done using the spaCy's underlying <a href="https://spacy.io/usage/spacy-101#annotations"><code>Doc</code> representation</a> of each token, which contains a <code>lemma_</code> property. Stopwords are removed simultaneously with the lemmatization process, as each of these steps involves iterating through the same list of tokens.</p>
 
@@ -711,7 +711,7 @@ Wall time: 46.4 s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Applying this method to the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the DataFrame and timing it shows that it takes almost a minute to run on $8800$ news articles.</p>
+<p>Applying this method to the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the DataFrame and timing it shows that it takes almost a minute to run on 8,800 news articles.</p>
 
 </div>
 </div>
@@ -719,8 +719,8 @@ Wall time: 46.4 s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Option-2.-Use-nlp.pipe">
-<a class="anchor" href="#Option-2.-Use-nlp.pipe" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 2. Use <code>nlp.pipe</code><a class="anchor-link" href="#Option-2.-Use-nlp.pipe"> </a>
+<h2 id="Option-2:-Use-nlp.pipe">
+<a class="anchor" href="#Option-2:-Use-nlp.pipe" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 2: Use <code>nlp.pipe</code><a class="anchor-link" href="#Option-2:-Use-nlp.pipe"> </a>
 </h2>
 <p>Can we do better? in the <a href="https://spacy.io/api/language#pipe">spaCy documentation</a>, it is stated that "processing texts as a stream is usually more efficient than processing them one-by-one". This is done by calling a language pipe, which internally divides the data into batches to reduce the number of pure-Python function calls. This means that the larger the data, the better the performance gain that can be obtained by <code>nlp.pipe</code>.</p>
 <p>To use the language pipe to stream texts, a separate lemmatizer method is defined that directly works on a spaCy <code>Doc</code> object. This method is then called in batches to work on a <em>sequence</em> of <code>Doc</code> objects that are streamed through the pipe as shown below.</p>
@@ -757,7 +757,7 @@ Wall time: 46.4 s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Just as before, a new column is created by passing data from the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the existing DataFrame. Note that unlike in workflow $#1$, we do not use the <code>apply</code> method - instead, the column of data (an iterable) is directly passed as an argument to the preprocessor pipe method.</p>
+<p>Just as before, a new column is created by passing data from the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the existing DataFrame. Note that unlike in workflow #1 above, we do not use the <code>apply</code> method here - instead, the column of data (an iterable) is directly passed as an argument to the preprocessor pipe method.</p>
 
 </div>
 </div>
@@ -852,7 +852,7 @@ Wall time: 44.9 s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Timing this workflow shows a slight improvement, but it still takes almost a minute on the entire set of $8800$ news articles. One would expect that as we work on bigger and bigger datasets, the timing gain using <code>nlp.pipe</code> would become more noticeable (on average).</p>
+<p>Timing this workflow shows a slight improvement, but it still takes almost a minute on the entire set of 8,800 news articles. One would expect that as we work on bigger and bigger datasets, the timing gain using <code>nlp.pipe</code> would become more noticeable (on average).</p>
 
 </div>
 </div>
@@ -860,8 +860,8 @@ Wall time: 44.9 s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Option-3.-Parallelize-the-work-using-joblib">
-<a class="anchor" href="#Option-3.-Parallelize-the-work-using-joblib" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 3. Parallelize the work using joblib<a class="anchor-link" href="#Option-3.-Parallelize-the-work-using-joblib"> </a>
+<h2 id="Option-3:-Parallelize-the-work-using-joblib">
+<a class="anchor" href="#Option-3:-Parallelize-the-work-using-joblib" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 3: Parallelize the work using joblib<a class="anchor-link" href="#Option-3:-Parallelize-the-work-using-joblib"> </a>
 </h2>
 <p>We can do still better! The previous workflows sequentially worked through each news document to produce the lemma lists, which were then appended to the DataFrame as a new column. Because each row's output is completely independent of the other, this is an <em>embarassingly parallel</em> problem, making it ideal for using multiple cores.</p>
 <p>The <code>joblib</code> library is recommended by spaCy for processing blocks of an NLP pipeline in parallel. Make sure that you <code>pip install joblib</code> before running the below section.</p>
@@ -1040,8 +1040,8 @@ Wall time: 16.8 s
 <h3 id="Effect-of-chunk-size-and-batch-size">
 <a class="anchor" href="#Effect-of-chunk-size-and-batch-size" aria-hidden="true"><span class="octicon octicon-link"></span></a>Effect of chunk size and batch size<a class="anchor-link" href="#Effect-of-chunk-size-and-batch-size"> </a>
 </h3>
-<p>Note that in the parallelized workflow, two parameters need to be specified - the optimum number can vary depending on the dataset. The <code>chunksize</code> controls the number of chunks being worked on by each process. In this example, for $8800$ documents, a chunksize of $1000$ is used. Too small a chunksize would mean that a large number of worker threads would spawn (each one waiting for other threads to complete), which can slow down execution. Generally, a chunksize of around $1/10^{th}$ of the total number of documents can be used as a starting point (assuming that all chunks fit into memory at any given time).</p>
-<p>The batch size is parameter specific to <code>nlp.pipe</code>, and again, a good value depends on the data being worked on. For reasonably long-sized text such as news articles, it makes sense to keep the batch size reasonably small (so that each batch doesn't contain <em>really</em> long texts), so in this case $20$ was chosen for the batch size. For other cases (e.g. Tweets) where each document is much shorter in length, a larger batch size can be used.</p>
+<p>Note that in the parallelized workflow, two parameters need to be specified - the optimum number can vary depending on the dataset. The <code>chunksize</code> controls the number of chunks being worked on by each process. In this example, for 8,800 documents, a chunksize of 1000 is used. Too small a chunksize would mean that a large number of worker threads would spawn (each one waiting for other threads to complete), which can slow down execution. Generally, a chunksize of around $1/10^{th}$ of the total number of documents can be used as a starting point (assuming that all chunks fit into memory at any given time).</p>
+<p>The batch size is parameter specific to <code>nlp.pipe</code>, and again, a good value depends on the data being worked on. For reasonably long-sized text such as news articles, it makes sense to keep the batch size reasonably small (so that each batch doesn't contain <em>really</em> long texts), so in this case 20 was chosen for the batch size. For other cases (e.g. Tweets) where each document is much shorter in length, a larger batch size can be used.</p>
 <p><strong>It is recommended to experiment with either parameter to see which combination produces the best performance</strong>.</p>
 
 </div>
@@ -1050,8 +1050,8 @@ Wall time: 16.8 s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Additional-points">
-<a class="anchor" href="#Additional-points" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additional points<a class="anchor-link" href="#Additional-points"> </a>
+<h2 id="Additional-gains">
+<a class="anchor" href="#Additional-gains" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additional gains<a class="anchor-link" href="#Additional-gains"> </a>
 </h2>
 </div>
 </div>
@@ -1064,9 +1064,16 @@ Wall time: 16.8 s
     <svg class="octicon octicon-zap" viewbox="0 0 10 16" version="1.1" width="10" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M10 7H6l3-7-9 9h4l-3 7 9-9z"></path></svg>
     <strong>Important: </strong>Use sets over lists for lookups wherever possible.
 </div>
-Note that in the <code>get_stopwords()</code> method defined earlier on, the list of stopwords read in from the stopword file was converted to a set before using it in the lemmatizer method for stopword removal via lookups. This is a very useful trick in general, but specifically for stopword removal, the use of sets becomes <strong>all the more important</strong>. Why?
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that in the <code>get_stopwords()</code> method defined earlier on, the list of stopwords read in from the stopword file was converted to a set before using it in the lemmatizer method for stopword removal via lookups. This is a very useful trick in general, but specifically for stopword removal, the use of sets becomes <strong>all the more important</strong>. Why?</p>
 <p>In any realistic stopword list, such as this one for a news dataset, it's reasonable to expect <em>several hundred</em> stopwords. This is because for downstream tasks such as topic modelling or sentiment analysis, there are a number of domain-specific words that need to be removed (very common verbs, useless abbreviations such as timezones, days of the week, etc.). Each word in each and every document needs to be compared against every word in the stopword list, which is an expensive operation over tens of thousands of documents.</p>
-<p>It's well known that sets have $O(1)$ (i.e. consant) lookup time as opposed to lists, which have $O(n)$ lookup time. In the <code>lemmatize()</code> method, since we're checking each word for membership in the set of stopwords, we would expect sets to be much better than lists. To test this, we can rerun workflow $#1$ but this time, use a stopword <em>list</em> instead.</p>
+<p>It's well known that sets have $O(1)$ (i.e. constant) lookup time as opposed to lists, which have $O(n)$ lookup time. In the <code>lemmatize()</code> method, since we're checking each word for membership in the set of stopwords, we would expect sets to be much better than lists. To test this, we can rerun workflow #1 but this time, use a stopword <em>list</em> instead.</p>
 
 </div>
 </div>
@@ -1193,8 +1200,8 @@ Wall time: 1min 21s
 <p><strong>Disable unnecessary components in spaCy model:</strong> The standard spaCy model's pipeline contains the tagger (to assign part-of-speech tags), the parser (to generate a dependency parse) and named entity recognition components. If any or none of these actions are desired, these components <em>must</em> be disabled immediately after loading the model (as shown above).</p>
 <p><strong>Use sets over lists for lookups:</strong> When performing lookups to compare one set of tokens against another, always check for membership using sets - lists are significantly slower for lookups! The larger the list/set of stopwords, the larger the performance gain seen when using sets.</p>
 <p><strong>Use custom language pipes when possible:</strong> Setting up a language pipe using <code>nlp.pipe</code> is an extremely flexible and efficient way to process large blocks of text. Even better, spaCy allows you to individually disable components for each specific sub-task, for example, when we need to separately perform part-of-speech tagging and named entity recognition (NER). <a href="https://spacy.io/usage/processing-pipelines#disabling">See the spaCy docs</a> for examples on how to disable pipeline components during model loading, processing or handling custom blocks.</p>
-<p><strong>Use multiple cores when possible:</strong> When processing individual documents completely independent of one another, consider parallelizing the workflow by passing the computation to multiple cores. As the number of documents becoms higher and higher, the performance gains can be tremendous. All you need to ensure is that the documents are divided up into chunks, all of which must fit into memory at any given time.</p>
-<p>Have fun testing these out in your next NLP project!</p>
+<p><strong>Use multiple cores when possible:</strong> When processing individual documents completely independent of one another, consider parallelizing the workflow by passing the computation to multiple cores. As the number of documents becoms higher and higher, the performance gains can be tremendous. One just needs to ensure that the documents are divided up into chunks, all of which must fit into memory at any given time.</p>
+<p>Hope this was useful and have fun testing these out in your next NLP project!</p>
 
 </div>
 </div>
