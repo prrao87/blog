@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Turbo-charge your spaCy NLP pipeline | Inverse Entropy</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Turbo-charge your spaCy NLP pipeline" />
+<meta name="author" content="Prashanth Rao" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Tips and tricks to significantly speed up text preprocessing and lemmatization using a multi-core custom spaCy pipeline." />
+<meta property="og:description" content="Tips and tricks to significantly speed up text preprocessing and lemmatization using a multi-core custom spaCy pipeline." />
+<link rel="canonical" href="https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/30/spacy-multiprocess.html" />
+<meta property="og:url" content="https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/30/spacy-multiprocess.html" />
+<meta property="og:site_name" content="Inverse Entropy" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-30T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Prashanth Rao"},"description":"Tips and tricks to significantly speed up text preprocessing and lemmatization using a multi-core custom spaCy pipeline.","mainEntityOfPage":{"@type":"WebPage","@id":"https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/30/spacy-multiprocess.html"},"@type":"BlogPosting","url":"https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/30/spacy-multiprocess.html","headline":"Turbo-charge your spaCy NLP pipeline","dateModified":"2020-04-30T00:00:00-05:00","datePublished":"2020-04-30T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://prrao87.github.io/blog/feed.xml" title="Inverse Entropy" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Turbo-charge your spaCy NLP pipeline | Inverse Entropy</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Turbo-charge your spaCy NLP pipeline" />
+<meta name="author" content="Prashanth Rao" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Tips and tricks to significantly speed up text preprocessing and lemmatization using a multi-core custom spaCy pipeline." />
+<meta property="og:description" content="Tips and tricks to significantly speed up text preprocessing and lemmatization using a multi-core custom spaCy pipeline." />
+<link rel="canonical" href="https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/30/spacy-multiprocess.html" />
+<meta property="og:url" content="https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/30/spacy-multiprocess.html" />
+<meta property="og:site_name" content="Inverse Entropy" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-30T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Prashanth Rao"},"description":"Tips and tricks to significantly speed up text preprocessing and lemmatization using a multi-core custom spaCy pipeline.","mainEntityOfPage":{"@type":"WebPage","@id":"https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/30/spacy-multiprocess.html"},"@type":"BlogPosting","url":"https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/30/spacy-multiprocess.html","headline":"Turbo-charge your spaCy NLP pipeline","dateModified":"2020-04-30T00:00:00-05:00","datePublished":"2020-04-30T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://prrao87.github.io/blog/feed.xml" title="Inverse Entropy" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script type="text/javascript">
+require.config({
+  paths: {
+    jquery: 'https://code.jquery.com/jquery-3.5.0.min',
+    plotly: 'https://cdn.plot.ly/plotly-latest.min'
+  },
+
+  shim: {
+    plotly: {
+      deps: ['jquery'],
+      exports: 'plotly'
+    }
+  }
+});
+</script>
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Inverse Entropy</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About Me</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Turbo-charge your spaCy NLP pipeline</h1><p class="page-description">Tips and tricks to significantly speed up text preprocessing and lemmatization using a multi-core custom spaCy pipeline.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-30T00:00:00-05:00" itemprop="datePublished">
+        Apr 30, 2020
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Prashanth Rao</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      15 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/blog/categories/#spacy">spacy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#nlp">nlp</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#performance">performance</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/prrao87/blog/tree/master/_notebooks/2020-04-30-spacy-multiprocess.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          
+          
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#Background">Background </a></li>
+<li class="toc-entry toc-h2"><a href="#Initial-steps">Initial steps </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Load-spaCy-model">Load spaCy model </a></li>
+<li class="toc-entry toc-h3"><a href="#Read-in-New-York-Times-Dataset">Read in New York Times Dataset </a></li>
+<li class="toc-entry toc-h3"><a href="#Define-text-cleaner">Define text cleaner </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#Option-1:-Work-directly-on-the-data-using-pandas.Series.apply">Option 1: Work directly on the data using pandas.Series.apply </a></li>
+<li class="toc-entry toc-h2"><a href="#Option-2:-Use-nlp.pipe">Option 2: Use nlp.pipe </a></li>
+<li class="toc-entry toc-h2"><a href="#Option-3:-Parallelize-the-work-using-joblib">Option 3: Parallelize the work using joblib </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Effect-of-chunk-size-and-batch-size">Effect of chunk size and batch size </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#Additional-gains">Additional gains </a></li>
+<li class="toc-entry toc-h2"><a href="#Conclusions">Conclusions </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-04-30-spacy-multiprocess.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="/blog/images/copied_from_nb/../images/rocket.jpg" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Background">
+<a class="anchor" href="#Background" aria-hidden="true"><span class="octicon octicon-link"></span></a>Background<a class="anchor-link" href="#Background"> </a>
+</h2>
+<p>Consider you have a large tabular dataset on which you want to apply some non-trivial NLP transformations, such as stopword removal followed by lemmatizing (i.e. reducing to root form) the words in a text. <a href="https://spacy.io/usage">spaCy</a> is an industrial strength NLP library designed for just such a task.</p>
+<p>In the example shown below, the <a href="https://www.kaggle.com/nzalake52/new-york-times-articles">New York Times Kaggle dataset</a> is used to showcase how to significantly speed up a spaCy NLP pipeline. the goal is to take in an article's text, and speedily return a list of lemmas with unnecessary words, called "stopwords", removed.</p>
+<p>Pandas DataFrames provide a convenient interface to work with tabular data of this nature. First, import the necessary modules shown.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p></p>
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+    </details>
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Initial-steps">
+<a class="anchor" href="#Initial-steps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Initial steps<a class="anchor-link" href="#Initial-steps"> </a>
+</h2>
+<p>The news data is obtained by running the preprocessing notebook <code>./data/preprocessing.ipynb</code>, which processes the raw text file downloaded from Kaggle and performs some basic cleaning on it. This step generates a file that contains the tabular data (stored as <code>nytimes.tsv</code>). A curated stopword file is also provided in <code>./data/stopwords</code>.</p>
+<p>Additionally, during initial testing, we can limit the size of the DataFrame being worked on (to a subset of the total number of articles) for faster execution. For the final run, disable the limit by setting it to zero.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p></p>
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
+<span class="n">inputfile</span> <span class="o">=</span> <span class="s2">"data/spacy_multiprocess/nytimes-sample.tsv"</span>
+<span class="n">stopwordfile</span> <span class="o">=</span> <span class="s2">"data/spacy_multiprocess/stopwords/stopwords.txt"</span>
+<span class="n">limit</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+    </details>
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Load-spaCy-model">
+<a class="anchor" href="#Load-spaCy-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Load spaCy model<a class="anchor-link" href="#Load-spaCy-model"> </a>
+</h3>
+<p>For lemmatization, a simple spaCy model can be initialized. Since we will not be doing any specialized tasks such as dependency parsing and named entity recognition in this exercise, these components are disabled.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p></p>
+<div class="flash flash-success">
+    <svg class="octicon octicon-checklist" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M16 8.5l-6 6-3-3L8.5 10l1.5 1.5L14.5 7 16 8.5zM5.7 12.2l.8.8H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h7c.55 0 1 .45 1 1v6.5l-.8-.8c-.39-.39-1.03-.39-1.42 0L5.7 10.8a.996.996 0 000 1.41v-.01zM4 4h5V3H4v1zm0 2h5V5H4v1zm0 2h3V7H4v1zM3 9H2v1h1V9zm0-2H2v1h1V7zm0-2H2v1h1V5zm0-2H2v1h1V3z"></path></svg>
+    <strong>Tip: </strong>spaCy has a <code>sentencizer</code> component that can be plugged into a blank pipeline.
+</div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The sentencizer pipeline simply performs tokenization and sentence boundary detection, following which lemmas can be extracted as token properties.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">'en_core_web_sm'</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="p">[</span><span class="s1">'tagger'</span><span class="p">,</span> <span class="s1">'parser'</span><span class="p">,</span> <span class="s1">'ner'</span><span class="p">])</span>
+<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">'sentencizer'</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A method is defined to read in stopwords from a text file and convert it to a set in Python (for efficient lookup).</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_stopwords</span><span class="p">():</span>
+    <span class="s2">"Return a set of stopwords read in from a file."</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stopwordfile</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">stopwords</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">stopwords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">))</span>
+    <span class="c1"># Convert to set for performance</span>
+    <span class="n">stopwords_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">stopwords_set</span>
+
+<span class="n">stopwords</span> <span class="o">=</span> <span class="n">get_stopwords</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Read-in-New-York-Times-Dataset">
+<a class="anchor" href="#Read-in-New-York-Times-Dataset" aria-hidden="true"><span class="octicon octicon-link"></span></a>Read in New York Times Dataset<a class="anchor-link" href="#Read-in-New-York-Times-Dataset"> </a>
+</h3>
+<p>The pre-processed version of the NYT news dataset is read in as a Pandas DataFrame. The columns are named <code>date</code>, <code>headline</code> and <code>content</code> - the text present in the content column is what will be preprocessed to remove stopwords and generate token lemmas.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">inputfile</span><span class="p">):</span>
+    <span class="s2">"Read in a tab-separated file with date, headline and news content"</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">inputfile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">'</span><span class="se">\t</span><span class="s1">'</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'headline'</span><span class="p">,</span> <span class="s1">'content'</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">inputfile</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>headline</th>
+      <th>content</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2016-06-30</td>
+      <td>washington nationals max scherzer baffles mets...</td>
+      <td>Stellar pitching kept the Mets afloat in the f...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2016-06-30</td>
+      <td>mayor de blasios counsel to leave next month t...</td>
+      <td>Mayor Bill de Blasio’s counsel and chief legal...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2016-06-30</td>
+      <td>three men charged in killing of cuomo administ...</td>
+      <td>In the early morning hours of Labor Day last y...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Define-text-cleaner">
+<a class="anchor" href="#Define-text-cleaner" aria-hidden="true"><span class="octicon octicon-link"></span></a>Define text cleaner<a class="anchor-link" href="#Define-text-cleaner"> </a>
+</h3>
+<p>Since the news article data comes from a raw HTML dump, it is very messy and contains a host of unnecessary symbols, social media handles, URLs and other artifacts. An easy way to clean it up is to use a regex that parses only alphanumeric strings and hyphens (so as to include hyphenated words) that are between a given length (3 and 50). This filters each document down to only meaningful text for the lemmatizer.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">cleaner</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="s2">"Extract relevant text from DataFrame using a regex"</span>
+    <span class="c1"># Regex pattern for only alphanumeric, hyphenated text with 3 or more chars</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[A-Za-z0-9\-]{3,50}"</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">'clean'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'content'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">limit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">limit</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_preproc</span> <span class="o">=</span> <span class="n">cleaner</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">df_preproc</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>headline</th>
+      <th>content</th>
+      <th>clean</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2016-06-30</td>
+      <td>washington nationals max scherzer baffles mets...</td>
+      <td>Stellar pitching kept the Mets afloat in the f...</td>
+      <td>Stellar pitching kept the Mets afloat the firs...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2016-06-30</td>
+      <td>mayor de blasios counsel to leave next month t...</td>
+      <td>Mayor Bill de Blasio’s counsel and chief legal...</td>
+      <td>Mayor Bill Blasio counsel and chief legal advi...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2016-06-30</td>
+      <td>three men charged in killing of cuomo administ...</td>
+      <td>In the early morning hours of Labor Day last y...</td>
+      <td>the early morning hours Labor Day last year gr...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now that we have just the clean, alphanumeric tokens left over, these can be further cleaned up by removing stopwords before proceeding to lemmatization.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Option-1:-Work-directly-on-the-data-using-pandas.Series.apply">
+<a class="anchor" href="#Option-1:-Work-directly-on-the-data-using-pandas.Series.apply" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 1: Work directly on the data using <code>pandas.Series.apply</code><a class="anchor-link" href="#Option-1:-Work-directly-on-the-data-using-pandas.Series.apply"> </a>
+</h2>
+<p>The straightforward way to process this text is to use an existing method, in this case the <code>lemmatize</code> method shown below, and apply it to the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the DataFrame. Lemmatization is done using the spaCy's underlying <a href="https://spacy.io/usage/spacy-101#annotations"><code>Doc</code> representation</a> of each token, which contains a <code>lemma_</code> property. Stopwords are removed simultaneously with the lemmatization process, as each of these steps involves iterating through the same list of tokens.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">lemmatize</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">"""Perform lemmatization and stopword removal in the clean text</span>
+<span class="sd">       Returns a list of lemmas</span>
+<span class="sd">    """</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">lemma_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">lemma_</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">doc</span>
+                  <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">is_alpha</span> <span class="ow">and</span> <span class="n">tok</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stopwords</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">lemma_list</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The resulting lemmas as stored as a list in a separate column <code>preproc</code> as shown below.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">df_preproc</span><span class="p">[</span><span class="s1">'preproc'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_preproc</span><span class="p">[</span><span class="s1">'clean'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lemmatize</span><span class="p">)</span>
+<span class="n">df_preproc</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'content'</span><span class="p">,</span> <span class="s1">'preproc'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 48.5 s, sys: 146 ms, total: 48.6 s
+Wall time: 48.6 s
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>content</th>
+      <th>preproc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2016-06-30</td>
+      <td>Stellar pitching kept the Mets afloat in the f...</td>
+      <td>[stellar, pitch, keep, mets, afloat, half, sea...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2016-06-30</td>
+      <td>Mayor Bill de Blasio’s counsel and chief legal...</td>
+      <td>[mayor, bill, blasio, counsel, chief, legal, a...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2016-06-30</td>
+      <td>In the early morning hours of Labor Day last y...</td>
+      <td>[early, labor, group, gunman, street, gang, cr...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Applying this method to the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the DataFrame and timing it shows that it takes almost a minute to run on 8,800 news articles.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Option-2:-Use-nlp.pipe">
+<a class="anchor" href="#Option-2:-Use-nlp.pipe" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 2: Use <code>nlp.pipe</code><a class="anchor-link" href="#Option-2:-Use-nlp.pipe"> </a>
+</h2>
+<p>Can we do better? in the <a href="https://spacy.io/api/language#pipe">spaCy documentation</a>, it is stated that "processing texts as a stream is usually more efficient than processing them one-by-one". This is done by calling a language pipe, which internally divides the data into batches to reduce the number of pure-Python function calls. This means that the larger the data, the better the performance gain that can be obtained by <code>nlp.pipe</code>.</p>
+<p>To use the language pipe to stream texts, a separate lemmatizer method is defined that directly works on a spaCy <code>Doc</code> object. This method is then called in batches to work on a <em>sequence</em> of <code>Doc</code> objects that are streamed through the pipe as shown below.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">lemmatize_pipe</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="n">lemma_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">lemma_</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">doc</span>
+                  <span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">is_alpha</span> <span class="ow">and</span> <span class="n">tok</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stopwords</span><span class="p">]</span> 
+    <span class="k">return</span> <span class="n">lemma_list</span>
+
+<span class="k">def</span> <span class="nf">preprocess_pipe</span><span class="p">(</span><span class="n">texts</span><span class="p">):</span>
+    <span class="n">preproc_pipe</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+        <span class="n">preproc_pipe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lemmatize_pipe</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">preproc_pipe</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Just as before, a new column is created by passing data from the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the existing DataFrame. Note that unlike in workflow #1 above, we do not use the <code>apply</code> method here - instead, the column of data (an iterable) is directly passed as an argument to the preprocessor pipe method.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">df_preproc</span><span class="p">[</span><span class="s1">'preproc_pipe'</span><span class="p">]</span> <span class="o">=</span> <span class="n">preprocess_pipe</span><span class="p">(</span><span class="n">df_preproc</span><span class="p">[</span><span class="s1">'clean'</span><span class="p">])</span>
+<span class="n">df_preproc</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'content'</span><span class="p">,</span> <span class="s1">'preproc_pipe'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 51.6 s, sys: 144 ms, total: 51.8 s
+Wall time: 51.8 s
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>content</th>
+      <th>preproc_pipe</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2016-06-30</td>
+      <td>Stellar pitching kept the Mets afloat in the f...</td>
+      <td>[stellar, pitch, keep, mets, afloat, half, sea...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2016-06-30</td>
+      <td>Mayor Bill de Blasio’s counsel and chief legal...</td>
+      <td>[mayor, bill, blasio, counsel, chief, legal, a...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2016-06-30</td>
+      <td>In the early morning hours of Labor Day last y...</td>
+      <td>[early, labor, group, gunman, street, gang, cr...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Timing this workflow doesn't seem to show improvement over the previous workflow, but as per the spaCy documentation, one would expect that as we work on bigger and bigger datasets, this approach would show some timing improvement (on average).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Option-3:-Parallelize-the-work-using-joblib">
+<a class="anchor" href="#Option-3:-Parallelize-the-work-using-joblib" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 3: Parallelize the work using joblib<a class="anchor-link" href="#Option-3:-Parallelize-the-work-using-joblib"> </a>
+</h2>
+<p>We can do still better! The previous workflows sequentially worked through each news document to produce the lemma lists, which were then appended to the DataFrame as a new column. Because each row's output is completely independent of the other, this is an <em>embarassingly parallel</em> problem, making it ideal for using multiple cores.</p>
+<p>The <code>joblib</code> library is recommended by spaCy for processing blocks of an NLP pipeline in parallel. Make sure that you <code>pip install joblib</code> before running the below section.</p>
+<p>To parallelize the workflow, a few more helper methods must be defined.</p>
+<ul>
+<li>
+<strong>Chunking:</strong> The news article content is a list of (long) strings where each document represents a single article's text. This data must be fed in "chunks" to each worker process started by <code>joblib</code>. Each call of the <code>chunker</code> method returns a generator that only contains that particular chunk's text as a list of strings. During lemmatization, each new chunk is retrieved based on the iterator index (with the previous chunks being "forgotten").</li>
+</ul>
+<ul>
+<li>
+<strong>Flattening:</strong> Once joblib creates a set of worker processes that work on each chunk, each worker returns a "list of list" containing lemmas for each document. These lists are then combined by the executor to provide a deeply nested final "list of list of lists". To ensure that the length of the output from the executor is the same as the actual number of articles, a "flatten" method is defined to combine the result into a list of lists containing lemmas. For example, if the executor returns a final result <code>[[[a, b, c], [d, e, f]], [[g, h, i], [j, k, l]]]</code>, a flattened version of this result would be <code>[[a, b, c], [d, e, f], [g, h, i], [j, k, l]]</code>.</li>
+</ul>
+<p>In addition to the above methods, a similar <code>nlp.pipe</code> method is used as in workflow #2, on each chunk of texts. Each of these methods is wrapped into a <code>preprocess_parallel</code> method that defines the number of worker processes to be used (7 in this case), breaks the input data into chunks and returns a flattened result that can then be appended to the DataFrame. For machine with a higher number of physical cores, the number of worker processes can be increased further.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="k">def</span> <span class="nf">chunker</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">total_length</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">iterable</span><span class="p">[</span><span class="n">pos</span><span class="p">:</span> <span class="n">pos</span> <span class="o">+</span> <span class="n">chunksize</span><span class="p">]</span> <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">total_length</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">list_of_lists</span><span class="p">):</span>
+    <span class="s2">"Flatten a list of lists to a combined list"</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">list_of_lists</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">process_chunk</span><span class="p">(</span><span class="n">texts</span><span class="p">):</span>
+    <span class="n">preproc_pipe</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+        <span class="n">preproc_pipe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lemmatize_pipe</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">preproc_pipe</span>
+
+<span class="k">def</span> <span class="nf">preprocess_parallel</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">executor</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">'multiprocessing'</span><span class="p">,</span> <span class="n">prefer</span><span class="o">=</span><span class="s2">"processes"</span><span class="p">)</span>
+    <span class="n">do</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="n">process_chunk</span><span class="p">)</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">(</span><span class="n">do</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span> <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunker</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_preproc</span><span class="p">),</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">))</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">flatten</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">df_preproc</span><span class="p">[</span><span class="s1">'preproc_parallel'</span><span class="p">]</span> <span class="o">=</span> <span class="n">preprocess_parallel</span><span class="p">(</span><span class="n">df_preproc</span><span class="p">[</span><span class="s1">'clean'</span><span class="p">],</span> <span class="n">chunksize</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 683 ms, sys: 248 ms, total: 932 ms
+Wall time: 17.2 s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_preproc</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'content'</span><span class="p">,</span> <span class="s1">'preproc_parallel'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>content</th>
+      <th>preproc_parallel</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2016-06-30</td>
+      <td>Stellar pitching kept the Mets afloat in the f...</td>
+      <td>[stellar, pitch, keep, mets, afloat, half, sea...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2016-06-30</td>
+      <td>Mayor Bill de Blasio’s counsel and chief legal...</td>
+      <td>[mayor, bill, blasio, counsel, chief, legal, a...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2016-06-30</td>
+      <td>In the early morning hours of Labor Day last y...</td>
+      <td>[early, labor, group, gunman, street, gang, cr...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Timing this parallelized workflow shows significant performance gains (almost <strong>3x</strong> reduction in run time)! As the number of documents becomes larger, the additional overhead of starting multiple worker threads with <code>joblib</code> is quickly paid for, and this method can significantly outperform the sequential methods.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Effect-of-chunk-size-and-batch-size">
+<a class="anchor" href="#Effect-of-chunk-size-and-batch-size" aria-hidden="true"><span class="octicon octicon-link"></span></a>Effect of chunk size and batch size<a class="anchor-link" href="#Effect-of-chunk-size-and-batch-size"> </a>
+</h3>
+<p>Note that in the parallelized workflow, two parameters need to be specified - the optimum number can vary depending on the dataset. The <code>chunksize</code> controls the number of chunks being worked on by each process. In this example, for 8,800 documents, a chunksize of 1000 is used. Too small a chunksize would mean that a large number of worker threads would spawn (each one waiting for other threads to complete), which can slow down execution. Generally, a chunksize of 10% the total number of documents can be used as a starting point (assuming that all chunks fit into memory at any given time).</p>
+<p>The batch size is parameter specific to <code>nlp.pipe</code>, and again, a good value depends on the data being worked on. For reasonably long-sized text such as news articles, it makes sense to keep the batch size reasonably small (so that each batch doesn't contain <em>really</em> long texts), so in this case 20 was chosen for the batch size. For other cases (e.g. Tweets) where each document is much shorter in length, a larger batch size can be used.</p>
+<p><strong>It is recommended to experiment with either parameter to see which combination produces the best performance</strong>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Additional-gains">
+<a class="anchor" href="#Additional-gains" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additional gains<a class="anchor-link" href="#Additional-gains"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p></p>
+<div class="flash flash-warn">
+    <svg class="octicon octicon-zap" viewbox="0 0 10 16" version="1.1" width="10" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M10 7H6l3-7-9 9h4l-3 7 9-9z"></path></svg>
+    <strong>Important: </strong>Use sets over lists for lookups wherever possible.
+</div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that in the <code>get_stopwords()</code> method defined earlier on, the list of stopwords read in from the stopword file was converted to a set before using it in the lemmatizer method for stopword removal via lookups. This is a very useful trick in general, but specifically for stopword removal, the use of sets becomes <strong>all the more important</strong>. Why?</p>
+<p>In any realistic stopword list, such as this one for a news dataset, it's reasonable to expect <em>several hundred</em> stopwords. This is because for downstream tasks such as topic modelling or sentiment analysis, there are a number of domain-specific words that need to be removed (very common verbs, useless abbreviations such as timezones, days of the week, etc.). Each word in each and every document needs to be compared against every word in the stopword list, which is an expensive operation over tens of thousands of documents.</p>
+<p>It's well known that sets have $O(1)$ (i.e. constant) lookup time as opposed to lists, which have $O(n)$ lookup time. In the <code>lemmatize()</code> method, since we're checking each word for membership in the set of stopwords, we would expect sets to be much better than lists. To test this, we can rerun workflow #1 but this time, use a stopword <em>list</em> instead.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stopwords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">stopwords</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">df_preproc</span><span class="p">[</span><span class="s1">'preproc_stopword_list'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_preproc</span><span class="p">[</span><span class="s1">'clean'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lemmatize</span><span class="p">)</span>
+<span class="n">df_preproc</span><span class="p">[[</span><span class="s1">'date'</span><span class="p">,</span> <span class="s1">'content'</span><span class="p">,</span> <span class="s1">'preproc_stopword_list'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 1min 17s, sys: 108 ms, total: 1min 18s
+Wall time: 1min 18s
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>content</th>
+      <th>preproc_stopword_list</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2016-06-30</td>
+      <td>Stellar pitching kept the Mets afloat in the f...</td>
+      <td>[stellar, pitch, keep, mets, afloat, half, sea...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2016-06-30</td>
+      <td>Mayor Bill de Blasio’s counsel and chief legal...</td>
+      <td>[mayor, bill, blasio, counsel, chief, legal, a...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2016-06-30</td>
+      <td>In the early morning hours of Labor Day last y...</td>
+      <td>[early, labor, group, gunman, street, gang, cr...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This method now takes ~<strong>50% longer</strong> than it did before (when using a stopword set), which is almost a <strong>1.5x</strong> increase in run time! This makes sense because in this case, the stopword list is about 500 words long, and <em>each and every word</em> in the corpus needs to be checked for membership in this reasonable-sized list.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusions">
+<a class="anchor" href="#Conclusions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusions<a class="anchor-link" href="#Conclusions"> </a>
+</h2>
+<p>In this exercise, a news article dataset (NY Times) was processed using a spaCy pipeline to output a list of lemmas representing the useful tokens present in each article's content. Because real-world news datasets are almost certainly bigger than this one, and can be almost unbounded in size, a fast, efficient NLP pipeline is necessary to perform any meaningful analysis on the data. The following steps are very useful in speeding up the spaCy pipeline.</p>
+<p><strong>Disable unnecessary components in spaCy model:</strong> The standard spaCy model's pipeline contains the tagger (to assign part-of-speech tags), the parser (to generate a dependency parse) and named entity recognition components. If any or none of these actions are desired, these components <em>must</em> be disabled immediately after loading the model (as shown above).</p>
+<p><strong>Use sets over lists for lookups:</strong> When performing lookups to compare one set of tokens against another, always check for membership using sets - lists are significantly slower for lookups! The larger the list/set of stopwords, the larger the performance gain seen when using sets.</p>
+<p><strong>Use custom language pipes when possible:</strong> Setting up a language pipe using <code>nlp.pipe</code> is an extremely flexible and efficient way to process large blocks of text. Even better, spaCy allows you to individually disable components for each specific sub-task, for example, when we need to separately perform part-of-speech tagging and named entity recognition (NER). <a href="https://spacy.io/usage/processing-pipelines#disabling">See the spaCy docs</a> for examples on how to disable pipeline components during model loading, processing or handling custom blocks.</p>
+<p><strong>Use multiple cores when possible:</strong> When processing individual documents completely independent of one another, consider parallelizing the workflow by passing the computation to multiple cores. As the number of documents becoms higher and higher, the performance gains can be tremendous. One just needs to ensure that the documents are divided up into chunks, all of which must fit into memory at any given time.</p>
+<p>Hope this was useful and have fun testing these out in your next NLP project!</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="prrao87/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/spacy/nlp/performance/2020/04/30/spacy-multiprocess.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>A place for data science, machine learning, NLP and other interesting computing topics.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/prrao87" title="prrao87"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/tech_optimist" title="tech_optimist"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
