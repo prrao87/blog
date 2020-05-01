@@ -341,7 +341,7 @@ img.emoji { display: inline !important; vertical-align: baseline !important; }
 
 .page-content { -webkit-font-smoothing: antialiased !important; text-rendering: optimizeLegibility !important; font-family: "Segoe UI", SegoeUI, Roboto, "Segoe WP", "Helvetica Neue", "Helvetica", "Tahoma", "Arial", sans-serif !important; }
 
-.post-content p, .post-content li { font-size: 20px; color: #515151; }
+.post-content p, .post-content li { font-size: 17px; color: #515151; }
 
 .post-link { font-weight: normal; }
 
@@ -411,11 +411,11 @@ h1:hover .anchor-link, h2:hover .anchor-link, h3:hover .anchor-link, h4:hover .a
 
 .search-result-highlight { color: #2e0137; font-weight: bold; }
 
-table { display: block !important; overflow-x: auto; white-space: nowrap; font-size: 75%; border: none; }
+table { display: block !important; overflow-x: auto; white-space: nowrap; font-size: 90%; border: none; }
 
 table th { text-align: center !important; }
 
-table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
+table td { text-overflow: ellipsis; overflow: hidden; max-width: 18em; }
 
 ::-webkit-scrollbar { width: 14px; height: 18px; }
 
@@ -469,17 +469,17 @@ table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 
 .highlight .c, .highlight .ch, .highlight .cm, .highlight .cpf, .highlight .c1, .highlight .cs { color: #6272a4; }
 
-.highlight .kd, .highlight .kt, .highlight .nb, .highlight .nl, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi, .highlight .vm { color: #8be9fd; }
+.highlight .kd, .highlight .kt, .highlight .nb, .highlight .nl, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi, .highlight .vm { color: #abb2bf; }
 
 .highlight .kd, .highlight .nb, .highlight .nl, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi, .highlight .vm { font-style: italic; }
 
 .highlight .fm, .highlight .na, .highlight .nc, .highlight .nf { color: #ace591; }
 
-.highlight .k, .highlight .o, .highlight .cp, .highlight .kc, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .nt, .highlight .ow { color: #ff79c6; }
+.highlight .k, .highlight .o, .highlight .cp, .highlight .kc, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .nt, .highlight .ow { color: #c792ea; }
 
 .highlight .kc { color: #ace591; }
 
-.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .mo, .highlight .il { color: #bd93f9; }
+.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .mo, .highlight .il { color: #c792ea; }
 
 .highlight .gd { color: #ff5555; }
 
