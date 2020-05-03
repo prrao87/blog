@@ -1,4 +1,101 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://prrao87.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://prrao87.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-05-02T19:46:55-05:00</updated><id>https://prrao87.github.io/blog/feed.xml</id><title type="html">Inverse Entropy</title><subtitle>A place for data science, machine learning, NLP and other interesting computing topics.</subtitle><entry><title type="html">Turbo-charge your spaCy NLP pipeline</title><link href="https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/29/spacy-multiprocess.html" rel="alternate" type="text/html" title="Turbo-charge your spaCy NLP pipeline" /><published>2020-04-29T00:00:00-05:00</published><updated>2020-04-29T00:00:00-05:00</updated><id>https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/29/spacy-multiprocess</id><content type="html" xml:base="https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/29/spacy-multiprocess.html">&lt;!--
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://prrao87.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://prrao87.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-05-02T20:03:16-05:00</updated><id>https://prrao87.github.io/blog/feed.xml</id><title type="html">Inverse Entropy</title><subtitle>A place for data science, machine learning, NLP and other interesting computing topics.</subtitle><entry><title type="html">Blogging for Data Scientists: Moving Away from Medium</title><link href="https://prrao87.github.io/blog/blogging-for-data-scientists/" rel="alternate" type="text/html" title="Blogging for Data Scientists: Moving Away from Medium" /><published>2020-05-02T00:00:00-05:00</published><updated>2020-05-02T00:00:00-05:00</updated><id>https://prrao87.github.io/blog/blogging-for-data-scientists</id><content type="html" xml:base="https://prrao87.github.io/blog/blogging-for-data-scientists/">&lt;p&gt;I recently began using &lt;a href=&quot;https://github.com/fastai/fastpages&quot;&gt;fastpages&lt;/a&gt;, a blogging platform based on GitHub Pages and Jekyll, that makes it easier to write technical blog posts using Jupyter notebooks. Over the years, I’d become accustomed to the familiarity and simplicity of Medium. While migrating to a self-hosted service can be quite intimidating for someone used to off-the-shelf solutions, I decided to go ahead and do it anyway (once I learned how simple it was to do using fastpages). I also began thinking about what it is that makes me blog in the first place. And the more I thought about it, the more I realized Medium wasn’t the right platform for me any more. If you’re a Data Scientist, or anyone in computing who likes writing blog posts involving code snippets, seriously, please, reconsider using Medium as your default option.&lt;/p&gt;
+
+&lt;h2 id=&quot;whats-wrong-with-medium&quot;&gt;What’s wrong with Medium?&lt;/h2&gt;
+&lt;p&gt;Okay, so you already have a Medium account, and you’ve been happily publishing posts for months without any problems. But if you just step back for a moment and think about it, you’ll see there are a number of problems.&lt;/p&gt;
+
+&lt;h3 id=&quot;free-isnt-free&quot;&gt;Free isn’t free&lt;/h3&gt;
+&lt;p&gt;As a data scientist and otherwise computer-savvy person, you’ll have spent countless hours on stackoverflow and other blogs, all of which provided you that knowledge for &lt;em&gt;free&lt;/em&gt;. No strings attached (alright, some of them did come with ads, I’ll admit). On the other hand, Medium’s exasperating drive to promote starred posts that are behind a paywall, has proven it’s doing the exact opposite. Your posts will be pushed to the top of its recommendation list if it has the most click-baity, contrarian title, commonly used tech jargon, and of course, the famous &lt;strong&gt;⭐&lt;/strong&gt; icon. If most Data Science and computing-related posts on Medium were written by people who acquired their knowledge (largely) through free portals, why should Medium be a gatekeeper to spreading more knowledge in this space?&lt;/p&gt;
+
+&lt;p&gt;Note, I say this &lt;em&gt;having been a paid subscriber&lt;/em&gt; to Medium for more than two years. As time went on, I found myself getting less and less value from my subscription. Yes, I’m aware that one can view paywalled Medium articles for free in incognito mode, but the sheer inconvenience of having to bypass a paywall each time I need to take a quick glance at possibly useful information is a huge disincentive on its own. Not to mention the annoyance of having to see that “subscribe to Medium” message every time I open a post (I know, because I’ve been there, done that and and &lt;strong&gt;still&lt;/strong&gt; not changed the world)!&lt;/p&gt;
+
+&lt;h3 id=&quot;poor-user-experience-with-code-formatting&quot;&gt;Poor user experience with code-formatting&lt;/h3&gt;
+&lt;p&gt;Because Medium wasn’t written from the ground up to support code-filled blog posts (including inline code-formatting was a &lt;a href=&quot;https://medium.engineering/inline-code-cc32ff2d463&quot;&gt;mere afterthought&lt;/a&gt;) - this leads to a lot of Medium posts being written with just bland code snippets, without syntax-highlighting. This places a significant burden on the writer to convert individual blocks of &lt;a href=&quot;https://sigdelsanjog.com.np/github-share-github-gists-on-medium/&quot;&gt;code to GitHub gists&lt;/a&gt; and embedded into a Medium post for a decent-looking snippet that can be read and understood easily. Most writers of posts choose &lt;em&gt;not&lt;/em&gt; to use gists (due to the inconvenience factor, or simply because they are unaware), instead publishing code snippets using the inbuilt code formatter without syntax-highlighting, making it a poor user experience from both the reader’s &lt;em&gt;and&lt;/em&gt; writer’s perspective.&lt;/p&gt;
+
+&lt;h3 id=&quot;non-existent-support-for-mathematical-symbols&quot;&gt;Non-existent support for mathematical symbols&lt;/h3&gt;
+&lt;p&gt;You’re limited to posting ugly images of mathematical symbols and equations on Medium. While this may look okay at the time of writing your post, it’s almost guaranteed to lose quality once it’s rendered onto Medium’s template and viewed on a host of different devices (try loading a math-heavy Medium post on a device with dark-mode enabled). Quality aside, it’s generally considered poor practice to post mathematical symbols as images (&lt;a href=&quot;https://www.washington.edu/doit/how-do-i-create-online-math-content-accessible-students-who-are-blind&quot;&gt;for accessibility reasons&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h3 id=&quot;reliance-on-a-single-platform-for-content&quot;&gt;Reliance on a single platform for content&lt;/h3&gt;
+&lt;p&gt;As Medium’s user base has grown, more and more people are writing content for the top publications (in Data Science and machine learning), which is not in itself a bad thing. However,  encouraging users to subscribe to a publication and providing a “one-stop-shop” for all things Data Science/ML-related means that users are pigeon-holed into obtaining their information from a single website. In the long run, great information is self-selected by a decentralized system (such as Google’s search algorithm), so it’s highly likely that your post will show up at the top of a relevant Google search anyway.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Note:  From my experience writing on Medium for Data Science-related topics, most traffic in the longer term comes through Google searches and external referrals, so why not just publish high-quality posts with insightful, relevant content on your own blog instead?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;fastpages---what-does-it-offer&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;fastpages&lt;/code&gt; - what does it offer?&lt;/h2&gt;
+&lt;p&gt;For those of you who are intimidated by building your own blog site and hosting it (for free), &lt;code class=&quot;highlighter-rouge&quot;&gt;fastpages&lt;/code&gt; (&lt;a href=&quot;https://fastpages.fast.ai/fastpages/jupyter/2020/02/21/introducing-fastpages.html&quot;&gt;built by Jeremy Howard and Hamel Husain&lt;/a&gt;) lets you do all of this from within the comfort of GitHub. Because it’s based on &lt;a href=&quot;https://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt; - a free service that lets you build and host your own website, it doesn’t come with any hidden baggage (all you need is a GitHub account, which you’ll already have, or will consider getting if you’re coding on a regular basis).&lt;/p&gt;
+
+&lt;p&gt;Jeremy provides a summary in his Tweet thread (with the linked blog post inside):&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;twitter: https://twitter.com/jeremyphoward/status/1232059428238581760?s=20&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;But in addition to those points, here are a few more reasons why you should consider using your own blog site.&lt;/p&gt;
+
+&lt;h3 id=&quot;pre-built-user-interface&quot;&gt;Pre-built user interface&lt;/h3&gt;
+&lt;p&gt;A large part of the hassle of building your own blog site is designing and implementing your own UI. With &lt;code class=&quot;highlighter-rouge&quot;&gt;fastpages&lt;/code&gt;, all the initial heavy lifting is done for you - a more than decent UI is provided by default, which contains all the essential components that one might ask for in a personal blog site:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Ability to use a personal domain name (&lt;code class=&quot;highlighter-rouge&quot;&gt;myname.dev&lt;/code&gt;) instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;myname.github.io/blogname&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Cleanly organized posts with image previews&lt;/li&gt;
+  &lt;li&gt;An “About” section describing who you are and your background&lt;/li&gt;
+  &lt;li&gt;Tags for searching blog posts by topic&lt;/li&gt;
+  &lt;li&gt;Badges that link visitors to your GitHub/Twitter pages&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;ready-made-code-formatting-and-syntax-highlighting&quot;&gt;Ready-made code formatting and syntax-highlighting&lt;/h3&gt;
+&lt;p&gt;Posts in &lt;code class=&quot;highlighter-rouge&quot;&gt;fastpages&lt;/code&gt; are written in directly in a Jupyter notebook, or using regular markdown, using a feature-rich editor (like &lt;a href=&quot;https://code.visualstudio.com/docs/languages/markdown&quot;&gt;VS Code&lt;/a&gt;). Depending on the language you’re highlighting, it’s a walk in the park to include code snippets that look exactly as you intended them to.&lt;/p&gt;
+
+&lt;h3 id=&quot;support-for-latex-style-equations&quot;&gt;Support for LaTeX-style equations&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;fastpages&lt;/code&gt; goes the extra mile and allows you to type in LaTeX-style mathematical symbols and equations, rendering them on your blog for you. This works with inline as well as stand-alone equations.&lt;/p&gt;
+
+&lt;p&gt;Example inline equation: $\alpha + \beta = \gamma$&lt;/p&gt;
+
+&lt;h3 id=&quot;keeps-code-and-the-related-blog-all-in-one-place&quot;&gt;Keeps code and the related blog all in one place&lt;/h3&gt;
+&lt;p&gt;Because Jupyter notebooks are essentially self-documenting blog posts themselves, &lt;code class=&quot;highlighter-rouge&quot;&gt;fastpages&lt;/code&gt; turbo-charges their use by offering custom syntax hints to directly publish a Jupyter notebook as a blog post (using an extension of the &lt;a href=&quot;https://github.com/fastai/nbdev&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;nbdev&lt;/code&gt;&lt;/a&gt; project). This is extremely useful, because it essentially reduces the labour of describing your Data Science workflow and experiments by allowing you to document your thought process &lt;em&gt;along with the code&lt;/em&gt; itself. This is a radical shift from the way you’ll have been conventionally blogging about such workflows (e.g. via Medium), where you’ll have had multiple browser tabs open for copy-pasting code, GitHub gists and more.&lt;/p&gt;
+
+&lt;h4 id=&quot;additional-thoughts-my-own-experience-blogging-with-notebooks&quot;&gt;Additional thoughts: My own experience blogging with notebooks&lt;/h4&gt;
+
+&lt;p&gt;Personally, this is one aspect of using &lt;code class=&quot;highlighter-rouge&quot;&gt;fastpages&lt;/code&gt; that has changed the way I think about blogging. Earlier, writing a blog post was always a significant upfront planning effort on my part - I’d lay out snippets of code that I’d need to publish in the blog beforehand. Then, I’d painstakingly create GitHub gists for each snippet so that I could embed them into my Medium post in between parts of the workflow where I was trying to explain a point. With notebooks, the whole process is organic, because you’re testing code snippets on the fly &lt;em&gt;along with the text for your blog&lt;/em&gt; side-by-side!&lt;/p&gt;
+
+&lt;p&gt;Even when using pure Markdown to write a blog post (as I did with this one), it’s as simple as working in a text editor and using &lt;code class=&quot;highlighter-rouge&quot;&gt;nbdev&lt;/code&gt; syntax to render effects such as highlighted tips and code folding (as shown in the &lt;a href=&quot;https://fastpages.fast.ai/fastpages/jupyter/2020/02/21/introducing-fastpages.html&quot;&gt;original blog post&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h2 id=&quot;examples-of-customizing-fastpages&quot;&gt;Examples of customizing &lt;code class=&quot;highlighter-rouge&quot;&gt;fastpages&lt;/code&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;change-syntax-highlight-colours&quot;&gt;Change syntax-highlight colours&lt;/h3&gt;
+
+&lt;h3 id=&quot;change-the-default-font-size&quot;&gt;Change the default font-size&lt;/h3&gt;
+
+&lt;h3 id=&quot;adding-the-disqus-comment-system&quot;&gt;Adding the &lt;em&gt;Disqus&lt;/em&gt; comment system&lt;/h3&gt;
+
+&lt;h3 id=&quot;faqs&quot;&gt;FAQs&lt;/h3&gt;
+
+&lt;h4 id=&quot;what-about-viewership-will-i-get-significantly-fewer-readers&quot;&gt;What about viewership? Will I get significantly fewer readers?&lt;/h4&gt;
+
+&lt;h4 id=&quot;wont-my-productivity-be-affected-if-i-have-to-make-a-commit-each-time&quot;&gt;Won’t my productivity be affected if I have to make a commit each time?&lt;/h4&gt;
+&lt;p&gt;If you’re writing blog posts about data-manipulation workflows with code snippets, it’s very likely you’re already committing the code &lt;em&gt;somewhere&lt;/em&gt;. Also, if you’re looking to increase your credibility in the field by publishing insightful, thought-out software development workflows, committing your blog to GitHub can only bring you more brownie points (by having an active commit history).&lt;/p&gt;
+
+&lt;h4 id=&quot;can-i-save-drafts-of-my-post-before-actually-publishing-it&quot;&gt;Can I save drafts of my post before actually publishing it?&lt;/h4&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+
+&lt;h3 id=&quot;why-do-you-write-blog-posts-in-the-first-place&quot;&gt;Why do you write blog posts in the first place?&lt;/h3&gt;
+
+&lt;p&gt;I’ve learned firsthand that writing about complex technical workflows cements those concepts in my brain. The more you do it, the better you become at conceptualizing those workflows for new, unseen situations. Using a service like Medium offers you &lt;em&gt;the wrong reward functions&lt;/em&gt; - that is, to increase viewership and receive more “claps”. Again, from my firsthand experience, having a decent number of claps on a Medium post did nothing to enhance my portfolio (after a point, receiving a clap meant nothing). Real jobs in the real world come from networking and talking to the right people, and a large part of that is how you &lt;em&gt;communicate&lt;/em&gt; your thought process. What better way to do so than getting your ideas out there in your own blog, without the pressure of virtual “pats on the back” from an online system!&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Note: Online abuse and toxicity is a very legitimate concern, so disabling comments on your posts using &lt;code class=&quot;highlighter-rouge&quot;&gt;fastpages&lt;/code&gt; or any other service is a valid, viable option for many.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The goal of writing a technical blog post, in my view, should be to provide at least &lt;em&gt;some useful insight&lt;/em&gt; to the reader. Even if it just benefits five people in the entire world, that’s a worthy reward in itself - because it is knowledge that was likely gained through a free and open portal (such as someone else’s blog), and is shared with someone else through another free portal (this also aligns well with the &lt;a href=&quot;https://webfoundation.org/about/vision/history-of-the-web/&quot;&gt;overall goals of the world wide web&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;The key to writing good posts is to find a reward function that works for &lt;em&gt;you&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;where-to-from-here&quot;&gt;Where to from here?&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;In the long run, you’re not tied to hosting on GitHub and using &lt;code class=&quot;highlighter-rouge&quot;&gt;fastpages&lt;/code&gt; - you can save the intermediate Markdown generated in the backend, so you can always migrate to another service if you choose to.&lt;/li&gt;
+  &lt;li&gt;As you upskill, you’ll find better ways to add new features, colours and functionality to your blog, and eventually, you’ll not be limited to relying on someone else’s template.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Prashanth Rao</name></author><summary type="html">I recently began using fastpages, a blogging platform based on GitHub Pages and Jekyll, that makes it easier to write technical blog posts using Jupyter notebooks. Over the years, I’d become accustomed to the familiarity and simplicity of Medium. While migrating to a self-hosted service can be quite intimidating for someone used to off-the-shelf solutions, I decided to go ahead and do it anyway (once I learned how simple it was to do using fastpages). I also began thinking about what it is that makes me blog in the first place. And the more I thought about it, the more I realized Medium wasn’t the right platform for me any more. If you’re a Data Scientist, or anyone in computing who likes writing blog posts involving code snippets, seriously, please, reconsider using Medium as your default option.</summary></entry><entry><title type="html">Turbo-charge your spaCy NLP pipeline</title><link href="https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/29/spacy-multiprocess.html" rel="alternate" type="text/html" title="Turbo-charge your spaCy NLP pipeline" /><published>2020-04-29T00:00:00-05:00</published><updated>2020-04-29T00:00:00-05:00</updated><id>https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/29/spacy-multiprocess</id><content type="html" xml:base="https://prrao87.github.io/blog/spacy/nlp/performance/2020/04/29/spacy-multiprocess.html">&lt;!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
