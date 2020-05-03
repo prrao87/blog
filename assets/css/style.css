@@ -341,7 +341,7 @@ img.emoji { display: inline !important; vertical-align: baseline !important; }
 
 .page-content { -webkit-font-smoothing: antialiased !important; text-rendering: optimizeLegibility !important; font-family: "Segoe UI", SegoeUI, Roboto, "Segoe WP", "Helvetica Neue", "Helvetica", "Tahoma", "Arial", sans-serif !important; }
 
-.post-content p, .post-content li { font-size: 17px; color: #515151; }
+.post-content p, .post-content li { font-size: 20px; color: #515151; }
 
 .post-link { font-weight: normal; }
 
@@ -411,11 +411,11 @@ h1:hover .anchor-link, h2:hover .anchor-link, h3:hover .anchor-link, h4:hover .a
 
 .search-result-highlight { color: #2e0137; font-weight: bold; }
 
-table { display: block !important; overflow-x: auto; white-space: nowrap; font-size: 90%; border: none; }
+table { display: block !important; overflow-x: auto; white-space: nowrap; font-size: 75%; border: none; }
 
 table th { text-align: center !important; }
 
-table td { text-overflow: ellipsis; overflow: hidden; max-width: 18em; }
+table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 
 ::-webkit-scrollbar { width: 14px; height: 18px; }
 
