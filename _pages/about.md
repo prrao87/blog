@@ -4,10 +4,7 @@ title: About Me
 permalink: /about/
 ---
 
-This is where you put the contents of your *About* page. Like all your pages, it's in [Markdown](https://guides.github.com/features/mastering-markdown/) format.
-
-This website is powered by **[fastpages](https://github.com/fastai/fastpages)** [^1].
+![](prao.png)
 
 
-
-[^1]:a blogging platform that natively supports Jupyter notebooks in addition to other formats.
+I'm a recovering recent graduate in computer science, with a passion for using data to understand the real world. I primarily work on Natural Language Processing (NLP) and Big Data problems using Python, spaCy and PySpark and a host of other machine learning libraries.

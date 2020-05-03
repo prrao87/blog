@@ -57,6 +57,12 @@ show_tags: true
 # Add your Google Analytics ID here if you have one and want to use it
 google_analytics: 
 
+# Disqus comments
+disqus:
+    # Leave shortname blank to disable comments site-wide.
+    # Disable comments for any post by adding `comments: false` to that post's YAML Front Matter.
+    shortname: prrao87
+
 exclude:
   - docker-compose.yml
   - action.yml
