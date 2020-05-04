@@ -1,28 +1,26 @@
-<p>I recently began using <a href="https://github.com/fastai/fastpages">fastpages</a>, a blogging platform based on GitHub Pages and Jekyll, that makes it easier to write technical blog posts using Jupyter notebooks. Over the years, I’d become accustomed to the familiarity and simplicity of Medium. While migrating to a self-hosted service can be quite intimidating for someone used to off-the-shelf solutions, I decided to go ahead and do it anyway (once I learned how simple it was to do using fastpages). I also began thinking about what it is that makes me blog in the first place. And the more I thought about it, the more I realized Medium wasn’t the right platform for me any more. If you’re a Data Scientist, or anyone in computing who likes writing blog posts involving code snippets, seriously, please, reconsider using Medium as your default option.</p>
+<p><img src="../images/posts/laptop.jpeg" alt="" /></p>
+
+<p>I recently began using <a href="https://github.com/fastai/fastpages"><code class="highlighter-rouge">fastpages</code></a>, a blogging platform based on GitHub Pages and Jekyll, that makes it easier to write technical blog posts using Jupyter notebooks. Over the years, I’d become accustomed to the familiarity and simplicity of Medium’s interface. Although migrating to a custom static blog site is quite intimidating for someone like me who’s never done it before, I decided to go ahead with it anyway. I also began thinking about what it is that makes me blog in the first place. And the more I thought about it, the more I realized Medium wasn’t the right platform for me any more. If you’re a Data Scientist, or anyone in computing who likes writing blog posts with code snippets and discussing workflows, seriously, please, reconsider using Medium as your default option.</p>
 
 <h2 id="whats-wrong-with-medium">What’s wrong with Medium?</h2>
-<p>Okay, so you already have a Medium account, and you’ve been happily publishing posts for months without any problems. But if you just step back for a moment and think about it, you’ll see there are a number of problems.</p>
+<p>Okay, so you already have a Medium account, are comfortable with its interface, and have been happily publishing posts for months without any problems. But just take a step back for a moment and think about it, and you’ll see there are a number of problems.</p>
 
 <h3 id="free-isnt-free">Free isn’t free</h3>
-<p>As a data scientist and otherwise computer-savvy person, you’ll have spent countless hours on stackoverflow and other blogs, all of which provided you that knowledge for <em>free</em>. No strings attached (alright, some of them did come with ads, I’ll admit). On the other hand, Medium’s exasperating drive to promote starred posts that are behind a paywall, has proven it’s doing the exact opposite. Your posts will be pushed to the top of its recommendation list if it has the most click-baity, contrarian title, commonly used tech jargon, and of course, the famous <strong>⭐</strong> icon. If most Data Science and computing-related posts on Medium were written by people who acquired their knowledge (largely) through free portals, why should Medium be a gatekeeper to spreading more knowledge in this space?</p>
+<p>As a data scientist and otherwise computer-savvy person, you’ll have spent countless hours on stackoverflow and other blogs, all of which provided you that knowledge for <em>free</em>. No strings attached (alright, some of them did come with ads, I’ll admit). On the other hand, Medium’s exasperating drive to promote starred posts that are behind a paywall has proven its goals are the exact opposite. Your posts will be pushed to the top of Medium’s recommendation list if it has the most click-baity, contrarian title, commonly used tech jargon, and of course, the famous 🟊 icon. If most Data Science and computing-related posts on Medium were written by people who acquired their knowledge (largely) through free portals, why should Medium be a gatekeeper to spreading more knowledge in this space?</p>
 
 <p>Note, I say this <em>having been a paid subscriber</em> to Medium for more than two years. As time went on, I found myself getting less and less value from my subscription. Yes, I’m aware that one can view paywalled Medium articles for free in incognito mode, but the sheer inconvenience of having to bypass a paywall each time I need to take a quick glance at possibly useful information is a huge disincentive on its own. Not to mention the annoyance of having to see that “subscribe to Medium” message every time I open a post (I know, because I’ve been there, done that and and <strong>still</strong> not changed the world)!</p>
 
 <h3 id="poor-user-experience-with-code-formatting">Poor user experience with code-formatting</h3>
-<p>Because Medium wasn’t written from the ground up to support code-filled blog posts (including inline code-formatting was a <a href="https://medium.engineering/inline-code-cc32ff2d463">mere afterthought</a>) - this leads to a lot of Medium posts being written with just bland code snippets, without syntax-highlighting. This places a significant burden on the writer to convert individual blocks of <a href="https://sigdelsanjog.com.np/github-share-github-gists-on-medium/">code to GitHub gists</a> and embedded into a Medium post for a decent-looking snippet that can be read and understood easily. Most writers of posts choose <em>not</em> to use gists (due to the inconvenience factor, or simply because they are unaware), instead publishing code snippets using the inbuilt code formatter without syntax-highlighting, making it a poor user experience from both the reader’s <em>and</em> writer’s perspective.</p>
+<p>Because Medium wasn’t written from the ground up to support code-strewn blog posts (including inline code-formatting was a <a href="https://medium.engineering/inline-code-cc32ff2d463">mere afterthought</a>) - this leads to a lot of Medium posts being written with just bland code snippets, without syntax-highlighting. A significant burden is placed on the writer to convert individual blocks of <a href="https://sigdelsanjog.com.np/github-share-github-gists-on-medium/">code to GitHub gists</a> and embedded into a Medium post for a decent-looking code snippet that can be read and understood easily. Most writers choose not to use gists due to the inconvenience factor (or are simply unaware of how to use them), instead publishing code snippets using Medium’s inbuilt code formatter without syntax-highlighting - this makes for a poor user experience from the reader’s <em>and</em> writer’s perspective.</p>
 
 <h3 id="non-existent-support-for-mathematical-symbols">Non-existent support for mathematical symbols</h3>
-<p>You’re limited to posting ugly images of mathematical symbols and equations on Medium. While this may look okay at the time of writing your post, it’s almost guaranteed to lose quality once it’s rendered onto Medium’s template and viewed on a host of different devices (try loading a math-heavy Medium post on a device with dark-mode enabled). Quality aside, it’s generally considered poor practice to post mathematical symbols as images (<a href="https://www.washington.edu/doit/how-do-i-create-online-math-content-accessible-students-who-are-blind">for accessibility reasons</a>).</p>
+<p>You’re limited to posting ugly images of mathematical symbols and equations on Medium. While this may look okay at the time of writing your post, it’s almost guaranteed to compromise quality when viewed on a host of different devices (try loading a math-heavy Medium post on a device with dark-mode enabled). Quality aside, it’s generally considered poor practice to post mathematical symbols as images (<a href="https://www.washington.edu/doit/how-do-i-create-online-math-content-accessible-students-who-are-blind">for accessibility reasons</a>).</p>
 
 <h3 id="reliance-on-a-single-platform-for-content">Reliance on a single platform for content</h3>
-<p>As Medium’s user base has grown, more and more people are writing content for the top publications (in Data Science and machine learning), which is not in itself a bad thing. However,  encouraging users to subscribe to a publication and providing a “one-stop-shop” for all things Data Science/ML-related means that users are pigeon-holed into obtaining their information from a single website. In the long run, great information is self-selected by a decentralized system (such as Google’s search algorithm), so it’s highly likely that your post will show up at the top of a relevant Google search anyway.</p>
+<p>As Medium’s user base has grown, more and more people are writing content for its top publications (in Data Science and machine learning), which is not in itself a bad thing. However,  encouraging users to subscribe to a publication and providing a “one-stop-shop” for all things Data Science/ML-related means that users are pigeon-holed into obtaining their information from a single website. In the long run, great information is self-selected by a decentralized system (such as Google’s search algorithm), so it’s highly likely that your post will show up at the top of a relevant Google search anyway.</p>
 
-<blockquote>
-  <p>Note:  From my experience writing on Medium for Data Science-related topics, most traffic in the longer term comes through Google searches and external referrals, so why not just publish high-quality posts with insightful, relevant content on your own blog instead?</p>
-</blockquote>
-
-<h2 id="fastpages---what-does-it-offer"><code class="highlighter-rouge">fastpages</code> - what does it offer?</h2>
-<p>For those of you who are intimidated by building your own blog site and hosting it (for free), <code class="highlighter-rouge">fastpages</code> (<a href="https://fastpages.fast.ai/fastpages/jupyter/2020/02/21/introducing-fastpages.html">built by Jeremy Howard and Hamel Husain</a>) lets you do all of this from within the comfort of GitHub. Because it’s based on <a href="https://pages.github.com/">GitHub Pages</a> - a free service that lets you build and host your own website, it doesn’t come with any hidden baggage (all you need is a GitHub account, which you’ll already have, or will consider getting if you’re coding on a regular basis).</p>
+<h2 id="what-does-fastpages-offer">What does <code class="highlighter-rouge">fastpages</code> offer?</h2>
+<p>For those of you who are intimidated by the thought of building your own blog site from scratch, <code class="highlighter-rouge">fastpages</code> (<a href="https://fastpages.fast.ai/fastpages/jupyter/2020/02/21/introducing-fastpages.html">built by Jeremy Howard and Hamel Husain</a>) lets you do all of this from within the comfort of GitHub. Because it’s based on <a href="https://pages.github.com/">GitHub Pages</a> - a free service for building and hosting custom websites - it doesn’t come with any hidden baggage. All you need is a GitHub account, which you’ll already have, or are considering getting if you’re coding on a regular basis.</p>
 
 <p>Jeremy provides a summary in his Tweet thread (with the linked blog post inside):</p>
 
@@ -30,10 +28,10 @@
   <p>twitter: https://twitter.com/jeremyphoward/status/1232059428238581760?s=20</p>
 </blockquote>
 
-<p>But in addition to those points, here are a few more reasons why you should consider using your own blog site.</p>
+<p>But in addition to his points, here are a few fundamental reasons why it makes sense to consider using your own blog site.</p>
 
 <h3 id="pre-built-user-interface">Pre-built user interface</h3>
-<p>A large part of the hassle of building your own blog site is designing and implementing your own UI. With <code class="highlighter-rouge">fastpages</code>, all the initial heavy lifting is done for you - a more than decent UI is provided by default, which contains all the essential components that one might ask for in a personal blog site:</p>
+<p>A large part of the hassle of building your own blog is designing and implementing a decent-looking UI. With <code class="highlighter-rouge">fastpages</code>, all the initial heavy lifting is done for you - a more than decent UI is provided by default, which contains all the essential components that one might ask for in a personal blog site:</p>
 
 <ul>
   <li>Ability to use a personal domain name (<code class="highlighter-rouge">myname.dev</code>) instead of <code class="highlighter-rouge">myname.github.io/blogname</code></li>
@@ -44,56 +42,117 @@
 </ul>
 
 <h3 id="ready-made-code-formatting-and-syntax-highlighting">Ready-made code formatting and syntax-highlighting</h3>
-<p>Posts in <code class="highlighter-rouge">fastpages</code> are written in directly in a Jupyter notebook, or using regular markdown, using a feature-rich editor (like <a href="https://code.visualstudio.com/docs/languages/markdown">VS Code</a>). Depending on the language you’re highlighting, it’s a walk in the park to include code snippets that look exactly as you intended them to.</p>
+<p>Posts in <code class="highlighter-rouge">fastpages</code> are written directly in a Jupyter notebook, or in Markdown using a feature-rich editor (like <a href="https://code.visualstudio.com/docs/languages/markdown">VS Code</a>). Depending on the language you’re highlighting, it’s a walk in the park to include code snippets that look exactly as you intended them to.</p>
 
 <h3 id="support-for-latex-style-equations">Support for LaTeX-style equations</h3>
 <p><code class="highlighter-rouge">fastpages</code> goes the extra mile and allows you to type in LaTeX-style mathematical symbols and equations, rendering them on your blog for you. This works with inline as well as stand-alone equations.</p>
 
 <p>Example inline equation: $\alpha + \beta = \gamma$</p>
 
-<h3 id="keeps-code-and-the-related-blog-all-in-one-place">Keeps code and the related blog all in one place</h3>
+<h3 id="keep-code-and-the-related-blog-explaining-it-all-in-one-place">Keep code and the related blog explaining it all in one place</h3>
 <p>Because Jupyter notebooks are essentially self-documenting blog posts themselves, <code class="highlighter-rouge">fastpages</code> turbo-charges their use by offering custom syntax hints to directly publish a Jupyter notebook as a blog post (using an extension of the <a href="https://github.com/fastai/nbdev"><code class="highlighter-rouge">nbdev</code></a> project). This is extremely useful, because it essentially reduces the labour of describing your Data Science workflow and experiments by allowing you to document your thought process <em>along with the code</em> itself. This is a radical shift from the way you’ll have been conventionally blogging about such workflows (e.g. via Medium), where you’ll have had multiple browser tabs open for copy-pasting code, GitHub gists and more.</p>
 
-<h4 id="additional-thoughts-my-own-experience-blogging-with-notebooks">Additional thoughts: My own experience blogging with notebooks</h4>
+<blockquote>
+  <p>Note: Additional thoughts from my own experience blogging with notebooks</p>
+</blockquote>
 
-<p>Personally, this is one aspect of using <code class="highlighter-rouge">fastpages</code> that has changed the way I think about blogging. Earlier, writing a blog post was always a significant upfront planning effort on my part - I’d lay out snippets of code that I’d need to publish in the blog beforehand. Then, I’d painstakingly create GitHub gists for each snippet so that I could embed them into my Medium post in between parts of the workflow where I was trying to explain a point. With notebooks, the whole process is organic, because you’re testing code snippets on the fly <em>along with the text for your blog</em> side-by-side!</p>
+<p>Personally, this is one aspect of using <code class="highlighter-rouge">fastpages</code> that has changed the way I think about blogging. Earlier, writing a blog post was always a significant upfront planning effort on my part - I’d lay out snippets of code that I’d need to publish in the blog beforehand. Then, I’d painstakingly create GitHub gists for each snippet so that I could embed them (with full syntax-highlighting) into my Medium post in between parts of the workflow where I was trying to explain a point. With notebooks, the whole process is organic, because you’re testing code snippets on the fly <em>along with the text for your blog</em> side-by-side!</p>
 
-<p>Even when using pure Markdown to write a blog post (as I did with this one), it’s as simple as working in a text editor and using <code class="highlighter-rouge">nbdev</code> syntax to render effects such as highlighted tips and code folding (as shown in the <a href="https://fastpages.fast.ai/fastpages/jupyter/2020/02/21/introducing-fastpages.html">original blog post</a>).</p>
+<p>Even when using pure Markdown to write a blog post (as I did with this one), it’s as simple as working in a text editor and using <code class="highlighter-rouge">nbdev</code> syntax to render effects such as highlighted notes and code folding (as shown in the <a href="https://fastpages.fast.ai/fastpages/jupyter/2020/02/21/introducing-fastpages.html">original blog post</a>).</p>
 
-<h2 id="examples-of-customizing-fastpages">Examples of customizing <code class="highlighter-rouge">fastpages</code></h2>
+<h2 id="some-faqs-on-using-fastpages">Some FAQs on using <code class="highlighter-rouge">fastpages</code></h2>
 
-<h3 id="change-syntax-highlight-colours">Change syntax-highlight colours</h3>
+<h4 id="what-about-viewership-wont-i-get-significantly-fewer-readers">What about viewership? Won’t I get significantly fewer readers?</h4>
+<p>It’s important to remember that viewership is just a vanity metric when it comes to personal blogs. It really doesn’t matter how many people see your posts on a weekly basis - what matters more is the value you derived by taking the time to write the post in the first place (by applying existing skills and learning new ones). A few readers might take the effort to react or post comments, but almost all are “silent” visitors - this is true regardless of the blogging platform used, so just focus on your own learning and writing skills!</p>
 
-<h3 id="change-the-default-font-size">Change the default font-size</h3>
+<blockquote>
+  <p>Note: Having been writing articles on Medium for almost two years, I’ve noted that Google searches and external referrals are the biggest contributors to new viewers in the long term. Content that is insightful and well-written should inevitably be found via the relevant keyword searches over time.</p>
+</blockquote>
 
-<h3 id="adding-the-disqus-comment-system">Adding the <em>Disqus</em> comment system</h3>
+<h4 id="wont-my-productivity-be-affected-if-i-have-to-make-commits-on-github-each-time">Won’t my productivity be affected if I have to make commits on GitHub each time?</h4>
+<p>If you’re writing blog posts involving code snippets, it’s very likely you’re already committing the code <em>somewhere</em>. Also, if you’re just starting off in the field and are looking to increase your credibility by publishing insightful, well-crafted software development workflows, hosting your blog on GitHub can only bring in more brownie points (by improving your active commit history).</p>
 
-<h3 id="faqs">FAQs</h3>
-
-<h4 id="what-about-viewership-will-i-get-significantly-fewer-readers">What about viewership? Will I get significantly fewer readers?</h4>
-
-<h4 id="wont-my-productivity-be-affected-if-i-have-to-make-a-commit-each-time">Won’t my productivity be affected if I have to make a commit each time?</h4>
-<p>If you’re writing blog posts about data-manipulation workflows with code snippets, it’s very likely you’re already committing the code <em>somewhere</em>. Also, if you’re looking to increase your credibility in the field by publishing insightful, thought-out software development workflows, committing your blog to GitHub can only bring you more brownie points (by having an active commit history).</p>
-
-<h4 id="can-i-save-drafts-of-my-post-before-actually-publishing-it">Can I save drafts of my post before actually publishing it?</h4>
+<h4 id="can-i-work-on-drafts-of-my-post-before-actually-publishing-it">Can I work on drafts of my post before actually publishing it?</h4>
+<p>A simple way to do this is to create a new folder <code class="highlighter-rouge">ideas</code> and simply write your posts in notebooks/Markdown files while committing to this directory. Only posts that are in the <code class="highlighter-rouge">_notebooks</code>, <code class="highlighter-rouge">_posts</code> and <code class="highlighter-rouge">_word</code> directories are published; all posts in other directories are ignored (but are still backed up on GitHub). Another alternative is to use the Front Matter option <code class="highlighter-rouge">hide: true</code> so that Jekyll doesn’t render the post on the web page (see the full description of Front Matter <a href="https://github.com/fastai/fastpages#customizing-blog-posts-with-front-matter">in the <code class="highlighter-rouge">fastpages</code> documentation</a>).</p>
 
 <h2 id="conclusions">Conclusions</h2>
 
 <h3 id="why-do-you-write-blog-posts-in-the-first-place">Why do you write blog posts in the first place?</h3>
 
-<p>I’ve learned firsthand that writing about complex technical workflows cements those concepts in my brain. The more you do it, the better you become at conceptualizing those workflows for new, unseen situations. Using a service like Medium offers you <em>the wrong reward functions</em> - that is, to increase viewership and receive more “claps”. Again, from my firsthand experience, having a decent number of claps on a Medium post did nothing to enhance my portfolio (after a point, receiving a clap meant nothing). Real jobs in the real world come from networking and talking to the right people, and a large part of that is how you <em>communicate</em> your thought process. What better way to do so than getting your ideas out there in your own blog, without the pressure of virtual “pats on the back” from an online system!</p>
+<p>I’ve learned firsthand that writing about complex technical workflows cements those concepts in my brain. The more you do it, the better you become at conceptualizing those workflows for new, unseen situations. Using a service like Medium offers you <em>the wrong reward function</em>, such as receiving appreciation through claps. It also creates the delusion that having more views (or claps) on your post matters in any tangible way. Real jobs in the real world come from networking and talking to the right people, and a large part of that is how you <em>communicate</em> your thought process and showcase your portfolio and skills online. What better way to do this than getting your ideas out there using your own blog site, with its own quirks and colour schemes, and most importantly, <em>without</em> the pressure of expecting virtual “pats on the back” from an online system!</p>
 
-<blockquote>
-  <p>Note: Online abuse and toxicity is a very legitimate concern, so disabling comments on your posts using <code class="highlighter-rouge">fastpages</code> or any other service is a valid, viable option for many.</p>
-</blockquote>
-
-<p>The goal of writing a technical blog post, in my view, should be to provide at least <em>some useful insight</em> to the reader. Even if it just benefits five people in the entire world, that’s a worthy reward in itself - because it is knowledge that was likely gained through a free and open portal (such as someone else’s blog), and is shared with someone else through another free portal (this also aligns well with the <a href="https://webfoundation.org/about/vision/history-of-the-web/">overall goals of the world wide web</a>).</p>
-
-<p>The key to writing good posts is to find a reward function that works for <em>you</em>.</p>
+<p>The goal of writing a technical blog post, in my view, should be to provide at least <em>some useful insight</em> to the reader. Even if your post just benefits five people in the entire world, that’s a worthy reward in itself - because it contains knowledge that was likely gained through a free and open portal (such as someone else’s blog), and is shared with someone else through another free portal (this also aligns well with the <a href="https://webfoundation.org/about/vision/history-of-the-web/">overall goals of the world wide web</a>).</p>
 
 <h3 id="where-to-from-here">Where to from here?</h3>
-<ul>
-  <li>In the long run, you’re not tied to hosting on GitHub and using <code class="highlighter-rouge">fastpages</code> - you can save the intermediate Markdown generated in the backend, so you can always migrate to another service if you choose to.</li>
-  <li>As you upskill, you’ll find better ways to add new features, colours and functionality to your blog, and eventually, you’ll not be limited to relying on someone else’s template.</li>
-</ul>
+<p>While <code class="highlighter-rouge">fastpages</code> is a great introduction to deploying and maintaining your own custom site, in the long run, you’re not tied to hosting your site on GitHub and the <code class="highlighter-rouge">fastpages</code> platform. <code class="highlighter-rouge">fastpages</code> allows you to save the intermediate Markdown files generated for each of your posts, so you can always migrate your blogs to another service if you need to.</p>
 
+<p>If you’re a Data Scientist, the great thing about using a tool like <code class="highlighter-rouge">fastpages</code> is that there’s already a <a href="https://forums.fast.ai/t/fastpages-github-pages-blog-using-nbdev/62828">community forum</a> with questions on commonly faced problems and great answers on functionality. It’s never too late to start working on your own blog, so keep writing and happy blogging!</p>
+
+<hr />
+
+<h2 id="appendix-examples-on-customizing-fastpages">Appendix: Examples on customizing <code class="highlighter-rouge">fastpages</code></h2>
+<p>Even if you don’t know all that much about CSS (I don’t either), it’s not that hard to customize some aesthetics.</p>
+
+<h3 id="change-syntax-highlight-colours">Change syntax-highlight colours</h3>
+<p>The default version of <code class="highlighter-rouge">fastpages</code> comes with dark syntax-highlighting for code, based on the popular Dracula theme. If you don’t particularly like all the colours in this theme, it’s relatively straightforward to customize via CSS.</p>
+
+<p>In <code class="highlighter-rouge">_sass/minima/custom-styles.scss</code>, copy  the existing <code class="highlighter-rouge">minima/custom-styles.scss/fastpages-dracula-highlight.scss</code> file (containing the Dracula colours) and create a new file <code class="highlighter-rouge">custom-code-colors</code> in the same directory. Point to this new file in <code class="highlighter-rouge">minima/custom-styles.scss</code> as follows.</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/* @import "minima/fastpages-dracula-highlight"; */</span>
+<span class="k">@import</span> <span class="s1">"minima/custom-code-colors"</span><span class="p">;</span> 
+</code></pre></div></div>
+<p>To change the colour definitions at the top, replace the relevant Hex code for the <code class="highlighter-rouge">$dt-purple</code> or <code class="highlighter-rouge">$dt-pink</code> colours with new colour shades (VS Code has a really nice <a href="https://mspoweruser.com/visual-studio-code-now-really-useful-color-picker-built/">colour picker built-in</a>). In my case, I chose a lighter purple definition. Next, I changed the keyword colour scheme under the <code class="highlighter-rouge">.highlight</code> selector.</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">$</span><span class="nt">dt-purple</span><span class="o">:</span> <span class="nf">#c792ea</span><span class="o">;</span>
+
+<span class="nc">.highlight</span> <span class="p">{</span>
+    <span class="err">.k,</span>
+    <span class="err">.o,</span>
+    <span class="err">.cp,</span>
+    <span class="err">.kc,</span>
+    <span class="err">.kn,</span>
+    <span class="err">.kp,</span>
+    <span class="err">.kr,</span>
+    <span class="err">.nt,</span>
+    <span class="err">.ow</span> <span class="err">{</span>
+      <span class="nl">color</span><span class="p">:</span> <span class="err">$</span><span class="n">dt-purple</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+<p>Other properties of the selector can be customized with new colours the same way.</p>
+
+<h3 id="change-the-font-and-default-font-size">Change the font and default font-size</h3>
+<p>If you want to tweak the fonts and font sizes used by <code class="highlighter-rouge">fastpages</code>, this can be done as follows.</p>
+
+<h4 id="code-font">Code font</h4>
+<p>I noticed that on my Linux machine, the code fonts that were being requested were not actually available - this was rendering code in the live blog using sans-serif fonts, which in my opinion looks rather ugly. I changed it to a monospace font (DejaVu Sans Mono) using the same <code class="highlighter-rouge">minima/custom-styles.scss</code> created in the previous example:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.input_area</span> <span class="nt">pre</span><span class="o">,</span> <span class="nc">.input_area</span> <span class="nt">div</span> <span class="p">{</span>
+    <span class="nl">margin-bottom</span><span class="p">:</span><span class="m">2rem</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="nl">margin-top</span><span class="p">:</span><span class="m">1.5rem</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="nl">padding-bottom</span><span class="p">:</span><span class="m">0</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="nl">padding-top</span><span class="p">:</span><span class="m">0</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="nl">background</span><span class="p">:</span> <span class="m">#323443</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="nl">-webkit-font-smoothing</span><span class="p">:</span> <span class="n">antialiased</span><span class="p">;</span>
+    <span class="nl">text-rendering</span><span class="p">:</span> <span class="n">optimizeLegibility</span><span class="p">;</span>
+    <span class="nl">font-family</span><span class="p">:</span> <span class="n">DejaVu</span> <span class="n">Sans</span> <span class="n">Mono</span><span class="p">,</span> <span class="nb">monospace</span><span class="p">;</span>
+    <span class="nl">border-radius</span><span class="p">:</span> <span class="m">5px</span><span class="p">;</span>
+    <span class="nl">font-size</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="main-blog-font">Main blog font</h4>
+<p>To change the content font size globally for all blog posts, edit the <code class="highlighter-rouge">minima/fastpages-styles.scss</code> file. Styles for non-headings are modified using the <code class="highlighter-rouge">post-content</code> selector:
+`</p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/* make non-headings slightly lighter */</span>
+<span class="nc">.post-content</span> <span class="nt">p</span><span class="o">,</span> <span class="nc">.post-content</span> <span class="nt">li</span> <span class="p">{</span>
+   <span class="nl">font-size</span><span class="p">:</span> <span class="m">18px</span><span class="p">;</span>
+   <span class="nl">color</span><span class="p">:</span> <span class="m">#515151</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="adding-the-disqus-comment-system">Adding the <em>Disqus</em> comment system</h3>
+<p>The <code class="highlighter-rouge">fastpages</code> documentation recommends using the <em>utteranc.es</em> service within GitHub for ad-free, non-trackable comments. While this is a great, light-weight option to allow users to comment on your post, it does require users to sign up for a GitHub account in order to comment.</p>
+
+<p>An alternate option is to use <em>Disqus</em>, which allows users to sign in using their social Media accounts and post comments instead. However, Disqus isn’t ad-free, and does involve some anonymous tracking, so it’s worth considering this before going ahead and enabling it for your site.</p>
+
+<p>In my case, I wanted to allow comments from users who may not be comfortable signing up for a GitHub account just for this purpose, so I went ahead and enabled Disqus comments using the instructions <a href="https://desiredpersona.com/disqus-comments-jekyll/">shown here</a>.</p>
