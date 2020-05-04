@@ -1,8 +1,9 @@
 ---
 title: "Blogging for Data Scientists: Moving Away from Medium"
-summary: "Thoughts and reflections on writing technical blog posts using fastpages and GitHub"
+description: "Thoughts and reflections on writing technical blog posts using fastpages and GitHub"
 toc: true
 comments: true
+layout: post
 image: "images/posts/laptop.jpeg"
 author: Prashanth Rao
 categories: [blogging, learning, fastpages]
