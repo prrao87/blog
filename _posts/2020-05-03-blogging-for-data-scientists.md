@@ -43,7 +43,7 @@ For those of you who are intimidated by the thought of building your own blog si
 
 Jeremy provides a summary in his Tweet thread (with the linked blog post inside): 
 
-> twitter: https://twitter.com/jeremyphoward/status/1232059428238581760?s=20
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">We&#39;re launching `fastpages`, a platform which allows you to host a blog for free, with no ads. You can blog with <a href="https://twitter.com/ProjectJupyter?ref_src=twsrc%5Etfw">@ProjectJupyter</a> notebooks, <a href="https://twitter.com/Office?ref_src=twsrc%5Etfw">@office</a> Word, directly from <a href="https://twitter.com/github?ref_src=twsrc%5Etfw">@github</a>&#39;s markdown editor, etc.<br><br>Nothing to install, &amp; setup is automated!<a href="https://t.co/dNSA0oQUrN">https://t.co/dNSA0oQUrN</a></p>&mdash; Jeremy #Masks4All Howard (@jeremyphoward) <a href="https://twitter.com/jeremyphoward/status/1232059428238581760?ref_src=twsrc%5Etfw">February 24, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 But in addition to his points, here are a few fundamental reasons why it makes sense to consider using your own blog site.
 
