@@ -45,7 +45,7 @@ Jeremy provides a summary in his Tweet thread (with the linked blog post inside)
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">We&#39;re launching `fastpages`, a platform which allows you to host a blog for free, with no ads. You can blog with <a href="https://twitter.com/ProjectJupyter?ref_src=twsrc%5Etfw">@ProjectJupyter</a> notebooks, <a href="https://twitter.com/Office?ref_src=twsrc%5Etfw">@office</a> Word, directly from <a href="https://twitter.com/github?ref_src=twsrc%5Etfw">@github</a>&#39;s markdown editor, etc.<br><br>Nothing to install, &amp; setup is automated!<a href="https://t.co/dNSA0oQUrN">https://t.co/dNSA0oQUrN</a></p>&mdash; Jeremy #Masks4All Howard (@jeremyphoward) <a href="https://twitter.com/jeremyphoward/status/1232059428238581760?ref_src=twsrc%5Etfw">February 24, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-But in addition to his points, here are a few fundamental reasons why it makes sense to consider using your own blog site.
+But in addition to ad-free hosting, here are a few fundamental reasons why it makes sense to consider using your own blog site.
 
 ### Pre-built user interface
 A large part of the hassle of building your own blog is designing and implementing a decent-looking UI. With `fastpages`, all the initial heavy lifting is done for you - a more than decent UI is provided by default, which contains all the essential components that one might ask for in a personal blog site:
@@ -101,24 +101,27 @@ The goal of writing a technical blog post, in my view, should be to provide at l
 
 
 ### Where to from here?
-While `fastpages` is a great introduction to deploying and maintaining your own custom site, in the long run, you're not tied to hosting your site on GitHub and the `fastpages` platform. `fastpages` allows you to save the intermediate Markdown files generated for each of your posts, so you can always migrate your blogs to another service if you need to.
+While `fastpages` is a great introduction to deploying and maintaining your own custom site, in the long run, you're not tied to hosting your site on GitHub and the `fastpages` platform. You're allowed to save the intermediate Markdown files generated for each of your posts, so you can always migrate your blogs to another service if you need to.
 
-If you're a Data Scientist, the great thing about using a tool like `fastpages` is that there's already a [community forum](https://forums.fast.ai/t/fastpages-github-pages-blog-using-nbdev/62828) with questions on commonly faced problems and great answers on functionality. It's never too late to start working on your own blog, so keep writing and happy blogging!
+If you're a Data Scientist, the great thing about using a tool like fastpages is that there's already a [community forum](https://forums.fast.ai/t/fastpages-github-pages-blog-using-nbdev/62828) with questions on commonly faced problems and great answers on functionality. It's never too late to start working on your own blog, so keep writing and happy blogging!
 
 ---
 
 ## Appendix: Examples on customizing `fastpages`
-Even if you don't know all that much about CSS (I don't either), it's not that hard to customize some aesthetics.
+Even if you don't know all that much about CSS or SCSS (I don't either), it's not that hard to customize some of the page's aesthetics. 
+
+> Note: SCSS ('Sass' CSS) is basically CSS with rule-nesting, loops and other logic added on top. [Here's a simple tutorial](https://dev.to/rishiabee/awesome-scss-the-basics-dh8).
 
 ### Change syntax-highlight colours
-The default version of `fastpages` comes with dark syntax-highlighting for code, based on the popular Dracula theme. If you don't particularly like all the colours in this theme, it's relatively straightforward to customize via CSS. 
+The default version of fastpages comes with dark syntax-highlighting for code, based on the popular Dracula theme. If you don't particularly like all the colours in this theme, it's relatively straightforward to customize via CSS. 
 
-In `_sass/minima/custom-styles.scss`, copy  the existing `minima/custom-styles.scss/fastpages-dracula-highlight.scss` file (containing the Dracula colours) and create a new file `custom-code-colors` in the same directory. Point to this new file in `minima/custom-styles.scss` as follows.
+In the `_sass/minima` directory , copy the existing file `minima/custom-styles.scss/fastpages-dracula-highlight.scss` (containing the Dracula colour scheme) to a new file `custom-code-colors.scss` in the same directory. Point to this new file in `minima/custom-styles.scss` as follows.
 
 ```css
 /* @import "minima/fastpages-dracula-highlight"; */
 @import "minima/custom-code-colors"; 
 ```
+
 To change the colour definitions at the top, replace the relevant Hex code for the `$dt-purple` or `$dt-pink` colours with new colour shades (VS Code has a really nice [colour picker built-in](https://mspoweruser.com/visual-studio-code-now-really-useful-color-picker-built/)). In my case, I chose a lighter purple definition. Next, I changed the keyword colour scheme under the `.highlight` selector.
 
 ```css
@@ -138,6 +141,7 @@ $dt-purple: #c792ea;
     }
 ```
 Other properties of the selector can be customized with new colours the same way.
+
 
 ### Change the font and default font-size
 If you want to tweak the fonts and font sizes used by `fastpages`, this can be done as follows.
