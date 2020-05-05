@@ -142,7 +142,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      13 min read
+      14 min read
     
 </span></p>
 
@@ -243,7 +243,7 @@ window.onload = wrap_img;
 </blockquote>
 <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-<p>But in addition to his points, here are a few fundamental reasons why it makes sense to consider using your own blog site.</p>
+<p>But in addition to ad-free hosting, here are a few fundamental reasons why it makes sense to consider using your own blog site.</p>
 
 <h3 id="pre-built-user-interface">
 <a class="anchor" href="#pre-built-user-interface" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pre-built user interface</h3>
@@ -312,26 +312,31 @@ window.onload = wrap_img;
 
 <h3 id="where-to-from-here">
 <a class="anchor" href="#where-to-from-here" aria-hidden="true"><span class="octicon octicon-link"></span></a>Where to from here?</h3>
-<p>While <code class="highlighter-rouge">fastpages</code> is a great introduction to deploying and maintaining your own custom site, in the long run, you’re not tied to hosting your site on GitHub and the <code class="highlighter-rouge">fastpages</code> platform. <code class="highlighter-rouge">fastpages</code> allows you to save the intermediate Markdown files generated for each of your posts, so you can always migrate your blogs to another service if you need to.</p>
+<p>While <code class="highlighter-rouge">fastpages</code> is a great introduction to deploying and maintaining your own custom site, in the long run, you’re not tied to hosting your site on GitHub and the <code class="highlighter-rouge">fastpages</code> platform. You’re allowed to save the intermediate Markdown files generated for each of your posts, so you can always migrate your blogs to another service if you need to.</p>
 
-<p>If you’re a Data Scientist, the great thing about using a tool like <code class="highlighter-rouge">fastpages</code> is that there’s already a <a href="https://forums.fast.ai/t/fastpages-github-pages-blog-using-nbdev/62828">community forum</a> with questions on commonly faced problems and great answers on functionality. It’s never too late to start working on your own blog, so keep writing and happy blogging!</p>
+<p>If you’re a Data Scientist, the great thing about using a tool like fastpages is that there’s already a <a href="https://forums.fast.ai/t/fastpages-github-pages-blog-using-nbdev/62828">community forum</a> with questions on commonly faced problems and great answers on functionality. It’s never too late to start working on your own blog, so keep writing and happy blogging!</p>
 
 <hr>
 
 <h2 id="appendix-examples-on-customizing-fastpages">
 <a class="anchor" href="#appendix-examples-on-customizing-fastpages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Appendix: Examples on customizing <code class="highlighter-rouge">fastpages</code>
 </h2>
-<p>Even if you don’t know all that much about CSS (I don’t either), it’s not that hard to customize some aesthetics.</p>
+<p>Even if you don’t know all that much about CSS or SCSS (I don’t either), it’s not that hard to customize some of the page’s aesthetics.</p>
+
+<blockquote>
+  <p>Note: SCSS (‘Sass’ CSS) is basically CSS with rule-nesting, loops and other logic added on top. <a href="https://dev.to/rishiabee/awesome-scss-the-basics-dh8">Here’s a simple tutorial</a>.</p>
+</blockquote>
 
 <h3 id="change-syntax-highlight-colours">
 <a class="anchor" href="#change-syntax-highlight-colours" aria-hidden="true"><span class="octicon octicon-link"></span></a>Change syntax-highlight colours</h3>
-<p>The default version of <code class="highlighter-rouge">fastpages</code> comes with dark syntax-highlighting for code, based on the popular Dracula theme. If you don’t particularly like all the colours in this theme, it’s relatively straightforward to customize via CSS.</p>
+<p>The default version of fastpages comes with dark syntax-highlighting for code, based on the popular Dracula theme. If you don’t particularly like all the colours in this theme, it’s relatively straightforward to customize via CSS.</p>
 
-<p>In <code class="highlighter-rouge">_sass/minima/custom-styles.scss</code>, copy  the existing <code class="highlighter-rouge">minima/custom-styles.scss/fastpages-dracula-highlight.scss</code> file (containing the Dracula colours) and create a new file <code class="highlighter-rouge">custom-code-colors</code> in the same directory. Point to this new file in <code class="highlighter-rouge">minima/custom-styles.scss</code> as follows.</p>
+<p>In the <code class="highlighter-rouge">_sass/minima</code> directory , copy the existing file <code class="highlighter-rouge">minima/custom-styles.scss/fastpages-dracula-highlight.scss</code> (containing the Dracula colour scheme) to a new file <code class="highlighter-rouge">custom-code-colors.scss</code> in the same directory. Point to this new file in <code class="highlighter-rouge">minima/custom-styles.scss</code> as follows.</p>
 
 <div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/* @import "minima/fastpages-dracula-highlight"; */</span>
 <span class="k">@import</span> <span class="s1">"minima/custom-code-colors"</span><span class="p">;</span> 
 </code></pre></div></div>
+
 <p>To change the colour definitions at the top, replace the relevant Hex code for the <code class="highlighter-rouge">$dt-purple</code> or <code class="highlighter-rouge">$dt-pink</code> colours with new colour shades (VS Code has a really nice <a href="https://mspoweruser.com/visual-studio-code-now-really-useful-color-picker-built/">colour picker built-in</a>). In my case, I chose a lighter purple definition. Next, I changed the keyword colour scheme under the <code class="highlighter-rouge">.highlight</code> selector.</p>
 
 <div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">$</span><span class="nt">dt-purple</span><span class="o">:</span> <span class="nf">#c792ea</span><span class="o">;</span>
