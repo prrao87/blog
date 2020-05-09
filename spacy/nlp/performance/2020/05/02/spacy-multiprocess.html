@@ -226,7 +226,7 @@ window.onload = wrap_img;
 <a class="anchor" href="#Background" aria-hidden="true"><span class="octicon octicon-link"></span></a>Background<a class="anchor-link" href="#Background"> </a>
 </h2>
 <p>Consider you have a large tabular dataset on which you want to apply some non-trivial NLP transformations, such as stopword removal followed by lemmatizing (i.e. reducing to root form) the words in a text. <a href="https://spacy.io/usage">spaCy</a> is an industrial strength NLP library designed for just such a task.</p>
-<p>In the example shown below, the <a href="https://www.kaggle.com/nzalake52/new-york-times-articles">New York Times Kaggle dataset</a> is used to showcase how to significantly speed up a spaCy NLP pipeline. The goal is to take in an article's text, and speedily return a list of lemmas with unnecessary words, called "stopwords", removed.</p>
+<p>In the example shown below, the <a href="https://www.kaggle.com/nzalake52/new-york-times-articles">New York Times News Article dataset</a> is used to showcase how to significantly speed up a spaCy NLP pipeline. The goal is to take in an article's text, and speedily return a list of lemmas with unnecessary words, called "stopwords", removed.</p>
 <p>Pandas DataFrames provide a convenient interface to work with tabular data of this nature. First, import the necessary modules shown.</p>
 
 </div>
@@ -756,7 +756,7 @@ Wall time: 48.6 s
 <a class="anchor" href="#Option-2:-Use-nlp.pipe" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 2: Use <code>nlp.pipe</code><a class="anchor-link" href="#Option-2:-Use-nlp.pipe"> </a>
 </h2>
 <p>Can we do better? in the <a href="https://spacy.io/api/language#pipe">spaCy documentation</a>, it is stated that "processing texts as a stream is usually more efficient than processing them one-by-one". This is done by calling a language pipe, which internally divides the data into batches to reduce the number of pure-Python function calls. This means that the larger the data, the better the performance gain that can be obtained by <code>nlp.pipe</code>.</p>
-<p>To use the language pipe to stream texts, a separate lemmatizer method is defined that directly works on a spaCy <code>Doc</code> object. This method is then called in batches to work on a <em>sequence</em> of <code>Doc</code> objects that are streamed through the pipe as shown below.</p>
+<p>To use the language pipe to stream texts, a new lemmatizer method is defined that directly works on a spaCy <code>Doc</code> object. This method is then called in batches to work on a <em>sequence</em> of <code>Doc</code> objects that are streamed through the pipe as shown below.</p>
 
 </div>
 </div>
@@ -885,7 +885,7 @@ Wall time: 51.8 s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Timing this workflow doesn't seem to show improvement over the previous workflow, but as per the spaCy documentation, one would expect that as we work on bigger and bigger datasets, this approach would show some timing improvement (on average).</p>
+<p>Timing this workflow doesn't seem to show improvement over the previous workflow, but as per the spaCy documentation, one would expect that as we work on bigger and bigger datasets, this approach should show some timing improvement (on average).</p>
 
 </div>
 </div>
@@ -905,9 +905,10 @@ Wall time: 51.8 s
 </ul>
 <ul>
 <li>
-<strong>Flattening:</strong> Once joblib creates a set of worker processes that work on each chunk, each worker returns a "list of list" containing lemmas for each document. These lists are then combined by the executor to provide a deeply nested final "list of list of lists". To ensure that the length of the output from the executor is the same as the actual number of articles, a "flatten" method is defined to combine the result into a list of lists containing lemmas. For example, if the executor returns a final result <code>[[[a, b, c], [d, e, f]], [[g, h, i], [j, k, l]]]</code>, a flattened version of this result would be <code>[[a, b, c], [d, e, f], [g, h, i], [j, k, l]]</code>.</li>
+<strong>Flattening:</strong> Once joblib creates a set of worker processes that work on each chunk, each worker returns a "list of lists" containing lemmas for each document. These lists are then combined by the executor to provide a 3-level nested final "list of lists of lists". To ensure that the length of the output from the executor is the same as the actual number of articles, a "flatten" method is defined to combine the result into a list of lists containing lemmas. As an example, two parallel executors would return a final nested list of the form: <code>[[[a, b, c], [d, e, f]], [[g, h, i], [j, k, l]]]</code>, where <code>[[a, b, c], [d, e, f]]</code> and <code>[[g, h, i], [j, k, l]]</code> refer to the output from each executor (the final output is then concatenated to a single list by joblob). A flattened version of this result would be <code>[[a, b, c], [d, e, f], [g, h, i], [j, k, l]]</code>, i.e. with one level of nesting removed.</li>
 </ul>
 <p>In addition to the above methods, a similar <code>nlp.pipe</code> method is used as in workflow #2, on each chunk of texts. Each of these methods is wrapped into a <code>preprocess_parallel</code> method that defines the number of worker processes to be used (7 in this case), breaks the input data into chunks and returns a flattened result that can then be appended to the DataFrame. For machine with a higher number of physical cores, the number of worker processes can be increased further.</p>
+<p>The parallelized workflow using joblib is shown below.</p>
 
 </div>
 </div>
@@ -1073,7 +1074,7 @@ Wall time: 17.2 s
 <h3 id="Effect-of-chunk-size-and-batch-size">
 <a class="anchor" href="#Effect-of-chunk-size-and-batch-size" aria-hidden="true"><span class="octicon octicon-link"></span></a>Effect of chunk size and batch size<a class="anchor-link" href="#Effect-of-chunk-size-and-batch-size"> </a>
 </h3>
-<p>Note that in the parallelized workflow, two parameters need to be specified - the optimum number can vary depending on the dataset. The <code>chunksize</code> controls the number of chunks being worked on by each process. In this example, for 8,800 documents, a chunksize of 1000 is used. Too small a chunksize would mean that a large number of worker threads would spawn (each one waiting for other threads to complete), which can slow down execution. Generally, a chunksize of 10% the total number of documents can be used as a starting point (assuming that all chunks fit into memory at any given time).</p>
+<p>Note that in the parallelized workflow, two parameters need to be specified - the optimum number can vary depending on the dataset. The <code>chunksize</code> controls the size of each chunk being worked on by each process. In this example, for 8,800 documents, a chunksize of 1000 is used. Too small a chunksize would mean that a large number of worker threads would spawn to deal with the large number of chunks overall, which can slow down execution. Generally, a chunksize of several hundred documents to a few thousand is a good starting point (of course, this depends on how big each document in the data is so that the chunks can fit into memory).</p>
 <p>The batch size is parameter specific to <code>nlp.pipe</code>, and again, a good value depends on the data being worked on. For reasonably long-sized text such as news articles, it makes sense to keep the batch size reasonably small (so that each batch doesn't contain <em>really</em> long texts), so in this case 20 was chosen for the batch size. For other cases (e.g. Tweets) where each document is much shorter in length, a larger batch size can be used.</p>
 <p><strong>It is recommended to experiment with either parameter to see which combination produces the best performance</strong>.</p>
 
@@ -1218,7 +1219,7 @@ Wall time: 1min 18s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This method now takes ~<strong>50% longer</strong> than it did before (when using a stopword set), which is almost a <strong>1.5x</strong> increase in run time! This makes sense because in this case, the stopword list is about 500 words long, and <em>each and every word</em> in the corpus needs to be checked for membership in this reasonable-sized list.</p>
+<p>This method now takes ~<strong>50% longer</strong> than it did before (when using a stopword set), which is a <strong>1.5x</strong> increase in run time! This makes sense because in this case, the stopword list is about 500 words long, and <em>each and every word</em> in the corpus needs to be checked for membership in this reasonable-sized list.</p>
 
 </div>
 </div>
@@ -1229,10 +1230,10 @@ Wall time: 1min 18s
 <h2 id="Conclusions">
 <a class="anchor" href="#Conclusions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusions<a class="anchor-link" href="#Conclusions"> </a>
 </h2>
-<p>In this exercise, a news article dataset (NY Times) was processed using a spaCy pipeline to output a list of lemmas representing the useful tokens present in each article's content. Because real-world news datasets are almost certainly bigger than this one, and can be almost unbounded in size, a fast, efficient NLP pipeline is necessary to perform any meaningful analysis on the data. The following steps are very useful in speeding up the spaCy pipeline.</p>
+<p>In this exercise, a news article dataset (NY Times) was processed using a spaCy pipeline to output a list of lemmas representing the useful tokens present in each article's content. Because real-world news datasets are almost certainly bigger than this one, and can be unbounded in size, a fast, efficient NLP pipeline is necessary to perform any meaningful analysis on the data. The following steps are very useful in speeding up the spaCy pipeline.</p>
 <p><strong>Disable unnecessary components in spaCy model:</strong> The standard spaCy model's pipeline contains the tagger (to assign part-of-speech tags), the parser (to generate a dependency parse) and named entity recognition components. If any or none of these actions are desired, these components <em>must</em> be disabled immediately after loading the model (as shown above).</p>
-<p><strong>Use sets over lists for lookups:</strong> When performing lookups to compare one set of tokens against another, always check for membership using sets - lists are significantly slower for lookups! The larger the list/set of stopwords, the larger the performance gain seen when using sets.</p>
-<p><strong>Use custom language pipes when possible:</strong> Setting up a language pipe using <code>nlp.pipe</code> is an extremely flexible and efficient way to process large blocks of text. Even better, spaCy allows you to individually disable components for each specific sub-task, for example, when we need to separately perform part-of-speech tagging and named entity recognition (NER). <a href="https://spacy.io/usage/processing-pipelines#disabling">See the spaCy docs</a> for examples on how to disable pipeline components during model loading, processing or handling custom blocks.</p>
+<p><strong>Use sets over lists for lookups:</strong> When performing lookups to compare one set of tokens against another, always perform membership checks using sets - lists are significantly slower for lookups! The larger the list/set of stopwords, the bigger the performance gain seen when using sets.</p>
+<p><strong>Use custom language pipes when possible:</strong> Setting up a language pipe using <code>nlp.pipe</code> is an extremely flexible and efficient way to process large blocks of text. Even better, spaCy allows you to individually disable components for each specific sub-task, for example, when you need to separately perform part-of-speech tagging and named entity recognition (NER). <a href="https://spacy.io/usage/processing-pipelines#disabling">See the spaCy docs</a> for examples on how to disable pipeline components during model loading, processing or handling custom blocks.</p>
 <p><strong>Use multiple cores when possible:</strong> When processing individual documents completely independent of one another, consider parallelizing the workflow by passing the computation to multiple cores. As the number of documents becoms higher and higher, the performance gains can be tremendous. One just needs to ensure that the documents are divided up into chunks, all of which must fit into memory at any given time.</p>
 <p>Hope this was useful, and have fun testing these out in your next NLP project!</p>
 
