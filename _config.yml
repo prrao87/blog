@@ -41,7 +41,7 @@ minima:
   social_links:
     twitter: tech_optimist
     github: prrao87
-    linkedin_username: prrao87
+    linkedin: prrao87
 
 # Set this to true to get LaTeX math equation support
 use_math: true
