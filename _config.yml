@@ -58,6 +58,9 @@ show_tags: true
 # Add your Google Analytics ID here if you have one and want to use it
 google_analytics: UA-165568153-1
 
+# Set this to true to turn on annotations with hypothes.is
+annotations: true
+
 # Disqus comments
 disqus:
     # Leave shortname blank to disable comments site-wide.
