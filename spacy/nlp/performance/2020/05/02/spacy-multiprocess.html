@@ -2,9 +2,10 @@
 <html lang="en"><head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Turbo-charge your spaCy NLP pipeline | Inverse Entropy</title>
-<meta name="generator" content="Jekyll v4.0.0" />
+<meta name="generator" content="Jekyll v4.1.1" />
 <meta property="og:title" content="Turbo-charge your spaCy NLP pipeline" />
 <meta name="author" content="Prashanth Rao" />
 <meta property="og:locale" content="en_US" />
@@ -17,7 +18,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-05-02T00:00:00-05:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Prashanth Rao"},"description":"Tips and tricks to significantly speed up text preprocessing using custom spaCy pipelines and joblib.","@type":"BlogPosting","headline":"Turbo-charge your spaCy NLP pipeline","url":"https://prrao87.github.io/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html","datePublished":"2020-05-02T00:00:00-05:00","dateModified":"2020-05-02T00:00:00-05:00","image":"https://prrao87.github.io/blog/images/rocket.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://prrao87.github.io/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html"},"@context":"https://schema.org"}</script>
+{"url":"https://prrao87.github.io/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html","@type":"BlogPosting","headline":"Turbo-charge your spaCy NLP pipeline","dateModified":"2020-05-02T00:00:00-05:00","datePublished":"2020-05-02T00:00:00-05:00","image":"https://prrao87.github.io/blog/images/rocket.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://prrao87.github.io/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html"},"author":{"@type":"Person","name":"Prashanth Rao"},"description":"Tips and tricks to significantly speed up text preprocessing using custom spaCy pipelines and joblib.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://prrao87.github.io/blog/feed.xml" title="Inverse Entropy" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -25,36 +26,12 @@
 
 <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-165568153-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
 
-<link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Turbo-charge your spaCy NLP pipeline | Inverse Entropy</title>
-<meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Turbo-charge your spaCy NLP pipeline" />
-<meta name="author" content="Prashanth Rao" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="Tips and tricks to significantly speed up text preprocessing using custom spaCy pipelines and joblib." />
-<meta property="og:description" content="Tips and tricks to significantly speed up text preprocessing using custom spaCy pipelines and joblib." />
-<link rel="canonical" href="https://prrao87.github.io/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html" />
-<meta property="og:url" content="https://prrao87.github.io/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html" />
-<meta property="og:site_name" content="Inverse Entropy" />
-<meta property="og:image" content="https://prrao87.github.io/blog/images/rocket.jpg" />
-<meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-05-02T00:00:00-05:00" />
-<script type="application/ld+json">
-{"author":{"@type":"Person","name":"Prashanth Rao"},"description":"Tips and tricks to significantly speed up text preprocessing using custom spaCy pipelines and joblib.","@type":"BlogPosting","headline":"Turbo-charge your spaCy NLP pipeline","url":"https://prrao87.github.io/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html","datePublished":"2020-05-02T00:00:00-05:00","dateModified":"2020-05-02T00:00:00-05:00","image":"https://prrao87.github.io/blog/images/rocket.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://prrao87.github.io/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html"},"@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-
-<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
-<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://prrao87.github.io/blog/feed.xml" title="Inverse Entropy" /><!-- the google_analytics_id gets auto inserted from the config file -->
-
-
-
-<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-165568153-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
-
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+<link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         renderMathInElement( document.body, {
@@ -67,23 +44,6 @@
     });
     </script>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
-<script type="text/javascript">
-require.config({
-  paths: {
-    jquery: 'https://code.jquery.com/jquery-3.5.0.min',
-    plotly: 'https://cdn.plot.ly/plotly-latest.min'
-  },
-
-  shim: {
-    plotly: {
-      deps: ['jquery'],
-      exports: 'plotly'
-    }
-  }
-});
-</script>
 
 <script>
 function wrap_img(fn) {
@@ -114,7 +74,8 @@ window.onload = wrap_img;
     elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
     });
 </script>
-</head><body><header class="site-header">
+</head>
+<body><header class="site-header">
 
   <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Inverse Entropy</a><nav class="site-nav">
         <input type="checkbox" id="nav-trigger" class="nav-trigger" />
@@ -204,13 +165,6 @@ window.onload = wrap_img;
 
 <div class="container" id="notebook-container">
         
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    
-
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -242,8 +196,7 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">spacy</span>
 </pre></div>
@@ -278,8 +231,7 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#collapse-hide</span>
-<span class="n">inputfile</span> <span class="o">=</span> <span class="s2">"data/spacy_multiprocess/nytimes-sample.tsv"</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">inputfile</span> <span class="o">=</span> <span class="s2">"data/spacy_multiprocess/nytimes-sample.tsv"</span>
 <span class="n">stopwordfile</span> <span class="o">=</span> <span class="s2">"data/spacy_multiprocess/stopwords/stopwords.txt"</span>
 <span class="n">limit</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
@@ -308,7 +260,7 @@ window.onload = wrap_img;
 <div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
 <div class="flash flash-success">
-    <svg class="octicon octicon-checklist" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M16 8.5l-6 6-3-3L8.5 10l1.5 1.5L14.5 7 16 8.5zM5.7 12.2l.8.8H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h7c.55 0 1 .45 1 1v6.5l-.8-.8c-.39-.39-1.03-.39-1.42 0L5.7 10.8a.996.996 0 000 1.41v-.01zM4 4h5V3H4v1zm0 2h5V5H4v1zm0 2h3V7H4v1zM3 9H2v1h1V9zm0-2H2v1h1V7zm0-2H2v1h1V5zm0-2H2v1h1V3z"></path></svg>
+    <svg class="octicon octicon-checklist" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M2.5 1.75a.25.25 0 01.25-.25h8.5a.25.25 0 01.25.25v7.736a.75.75 0 101.5 0V1.75A1.75 1.75 0 0011.25 0h-8.5A1.75 1.75 0 001 1.75v11.5c0 .966.784 1.75 1.75 1.75h3.17a.75.75 0 000-1.5H2.75a.25.25 0 01-.25-.25V1.75zM4.75 4a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5zM4 7.75A.75.75 0 014.75 7h2a.75.75 0 010 1.5h-2A.75.75 0 014 7.75zm11.774 3.537a.75.75 0 00-1.048-1.074L10.7 14.145 9.281 12.72a.75.75 0 00-1.062 1.058l1.943 1.95a.75.75 0 001.055.008l4.557-4.45z"></path></svg>
     <strong>Tip: </strong>spaCy has a <code>sentencizer</code> component that can be plugged into a blank pipeline.
 </div>
 
@@ -617,7 +569,7 @@ window.onload = wrap_img;
 <h2 id="Option-1:-Sequentially-process-DataFrame-column">
 <a class="anchor" href="#Option-1:-Sequentially-process-DataFrame-column" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 1: Sequentially process DataFrame column<a class="anchor-link" href="#Option-1:-Sequentially-process-DataFrame-column"> </a>
 </h2>
-<p>The straightforward way to process this text is to use an existing method, in this case the <code>lemmatize</code> method shown below, and apply it to the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the DataFrame using <code>pandas.Series.apply</code>. Lemmatization is done using the spaCy's underlying <a href="https://spacy.io/usage/spacy-101#annotations"><code>Doc</code> representation</a> of each token, which contains a <code>lemma_</code> property. Stopwords are removed simultaneously with the lemmatization process, as each of these steps involves iterating through the same list of tokens.</p>
+<p>The straightforward way to process this text is to use an existing method, in this case the <code>lemmatize</code> method shown below, and apply it to the <code>clean</code> column of the DataFrame using <code>pandas.Series.apply</code>. Lemmatization is done using the spaCy's underlying <a href="https://spacy.io/usage/spacy-101#annotations"><code>Doc</code> representation</a> of each token, which contains a <code>lemma_</code> property. Stopwords are removed simultaneously with the lemmatization process, as each of these steps involves iterating through the same list of tokens.</p>
 
 </div>
 </div>
@@ -744,7 +696,7 @@ Wall time: 48.6 s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Applying this method to the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the DataFrame and timing it shows that it takes almost a minute to run on 8,800 news articles.</p>
+<p>Applying this method to the <code>clean</code> column of the DataFrame and timing it shows that it takes almost a minute to run on 8,800 news articles.</p>
 
 </div>
 </div>
@@ -790,7 +742,7 @@ Wall time: 48.6 s
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Just as before, a new column is created by passing data from the <a href="/blog/images/copied_from_nb/clean"><code>clean</code></a> column of the existing DataFrame. Note that unlike in workflow #1 above, we do not use the <code>apply</code> method here - instead, the column of data (an iterable) is directly passed as an argument to the preprocessor pipe method.</p>
+<p>Just as before, a new column is created by passing data from the <code>clean</code> column of the existing DataFrame. Note that unlike in workflow #1 above, we do not use the <code>apply</code> method here - instead, the column of data (an iterable) is directly passed as an argument to the preprocessor pipe method.</p>
 
 </div>
 </div>
@@ -1094,7 +1046,7 @@ Wall time: 17.2 s
 <div class="text_cell_render border-box-sizing rendered_html">
 <p></p>
 <div class="flash flash-warn">
-    <svg class="octicon octicon-zap" viewbox="0 0 10 16" version="1.1" width="10" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M10 7H6l3-7-9 9h4l-3 7 9-9z"></path></svg>
+    <svg class="octicon octicon-zap" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M10.561 1.5a.016.016 0 00-.01.004L3.286 8.571A.25.25 0 003.462 9H6.75a.75.75 0 01.694 1.034l-1.713 4.188 6.982-6.793A.25.25 0 0012.538 7H9.25a.75.75 0 01-.683-1.06l2.008-4.418.003-.006a.02.02 0 00-.004-.009.02.02 0 00-.006-.006L10.56 1.5zM9.504.43a1.516 1.516 0 012.437 1.713L10.415 5.5h2.123c1.57 0 2.346 1.909 1.22 3.004l-7.34 7.142a1.25 1.25 0 01-.871.354h-.302a1.25 1.25 0 01-1.157-1.723L5.633 10.5H3.462c-1.57 0-2.346-1.909-1.22-3.004L9.503.429z"></path></svg>
     <strong>Important: </strong>Use sets over lists for lookups wherever possible.
 </div>
 
@@ -1243,7 +1195,15 @@ Wall time: 1min 18s
 
 
 
-  </div><div id="disqus_thread"></div>
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="prrao87/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><div id="disqus_thread"></div>
   <script>
     var disqus_config = function () {
       this.page.url = 'https://prrao87.github.io/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html';
