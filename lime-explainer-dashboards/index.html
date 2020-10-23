@@ -4,9 +4,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Building a LIME explainer dashboard in Python | Inverse Entropy</title>
+<title>Build a LIME explainer dashboard with the fewest lines of code | Inverse Entropy</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Building a LIME explainer dashboard in Python" />
+<meta property="og:title" content="Build a LIME explainer dashboard with the fewest lines of code" />
 <meta name="author" content="Prashanth Rao" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A comparison of Flask, Plotly Dash and Streamlit to build dashboards that provide LIME explanations for classification results" />
@@ -16,9 +16,9 @@
 <meta property="og:site_name" content="Inverse Entropy" />
 <meta property="og:image" content="https://prrao87.github.io/blog/images/posts/doors.jpg" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-10-10T00:00:00-05:00" />
+<meta property="article:published_time" content="2020-10-22T00:00:00-05:00" />
 <script type="application/ld+json">
-{"url":"https://prrao87.github.io/blog/lime-explainer-dashboards/","@type":"BlogPosting","headline":"Building a LIME explainer dashboard in Python","dateModified":"2020-10-10T00:00:00-05:00","datePublished":"2020-10-10T00:00:00-05:00","image":"https://prrao87.github.io/blog/images/posts/doors.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://prrao87.github.io/blog/lime-explainer-dashboards/"},"author":{"@type":"Person","name":"Prashanth Rao"},"description":"A comparison of Flask, Plotly Dash and Streamlit to build dashboards that provide LIME explanations for classification results","@context":"https://schema.org"}</script>
+{"url":"https://prrao87.github.io/blog/lime-explainer-dashboards/","@type":"BlogPosting","headline":"Build a LIME explainer dashboard with the fewest lines of code","dateModified":"2020-10-22T00:00:00-05:00","datePublished":"2020-10-22T00:00:00-05:00","image":"https://prrao87.github.io/blog/images/posts/doors.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://prrao87.github.io/blog/lime-explainer-dashboards/"},"author":{"@type":"Person","name":"Prashanth Rao"},"description":"A comparison of Flask, Plotly Dash and Streamlit to build dashboards that provide LIME explanations for classification results","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://prrao87.github.io/blog/feed.xml" title="Inverse Entropy" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -95,15 +95,15 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Building a LIME explainer dashboard in Python</h1><p class="page-description">A comparison of Flask, Plotly Dash and Streamlit to build dashboards that provide LIME explanations for classification results</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-10T00:00:00-05:00" itemprop="datePublished">
-        Oct 10, 2020
+    <h1 class="post-title p-name" itemprop="name headline">Build a LIME explainer dashboard with the fewest lines of code</h1><p class="page-description">A comparison of Flask, Plotly Dash and Streamlit to build dashboards that provide LIME explanations for classification results</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-10-22T00:00:00-05:00" itemprop="datePublished">
+        Oct 22, 2020
       </time>• 
           <span itemprop="author" itemscope itemtype="http://schema.org/Person">
             <span class="p-author h-card" itemprop="name">Prashanth Rao</span></span>
        • <span class="read-time" title="Estimated read time">
     
     
-      6 min read
+      14 min read
     
 </span></p>
 
@@ -114,6 +114,9 @@ window.onload = wrap_img;
         &nbsp;
       
         <a class="category-tags-link" href="/blog/categories/#dataviz">dataviz</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#web-app">web-app</a>
         
       
       </p>
@@ -122,35 +125,69 @@ window.onload = wrap_img;
     </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p><img src="../images/posts/doors.jpg" alt="" /></p>
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#background">Background</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#example-lime-explanation">Example LIME explanation</a></li>
+<li class="toc-entry toc-h2"><a href="#why-build-an-interactive-dashboard-app">Why build an interactive dashboard app?</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#explainer-class">Explainer class</a></li>
+<li class="toc-entry toc-h1"><a href="#option-1-flask">Option 1: Flask</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#flask-app-directory-structure">Flask app: directory structure</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#option-2-dash-by-plotly">Option 2: Dash (by Plotly)</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#dash-app-directory-structure">Dash app: directory structure</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#option-3-streamlit">Option 3: Streamlit</a></li>
+<li class="toc-entry toc-h1"><a href="#deployment">Deployment</a></li>
+<li class="toc-entry toc-h1"><a href="#a-note-on-scalability-in-python-web-frameworks">A note on scalability in Python web frameworks</a></li>
+<li class="toc-entry toc-h1"><a href="#when-does-it-make-the-most-sense-to-use-each-framework">When does it make the most sense to use each framework?</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#flask">Flask</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h1"><a href="#conclusions">Conclusions</a></li>
+</ul><p><img src="../images/posts/doors.jpg" alt=""></p>
 
-<h1 id="background">Background</h1>
+<h1 id="background">
+<a class="anchor" href="#background" aria-hidden="true"><span class="octicon octicon-link"></span></a>Background</h1>
 
 <p>In <a href="https://towardsdatascience.com/fine-grained-sentiment-analysis-in-python-part-2-2a92fdc0160d">an earlier post</a>, I described how to explain a fine-grained sentiment classifier’s results using LIME (<strong>L</strong>ocal <strong>I</strong>nterpretable <strong>M</strong>odel-agnostic <strong>E</strong>xplanations). To recap, the following six models were used to make fine-grained sentiment class predictions on the Stanford Sentiment Treebank (SST-5) dataset.</p>
 
 <ul>
-  <li>Rule-based models: <strong>TextBlob</strong> and <strong>VADER</strong></li>
-  <li>Feature-based models: <strong>Logistic regression</strong> and <strong>Support Vector Machine</strong></li>
-  <li>Embedding-based models: <strong>FastText</strong> and <strong>Flair</strong></li>
+  <li>Rule-based models: <strong>TextBlob</strong> and <strong>VADER</strong>
+</li>
+  <li>Feature-based models: <strong>Logistic regression</strong> and <strong>Support Vector Machine</strong>
+</li>
+  <li>Embedding-based models: <strong>FastText</strong> and <strong>Flair</strong>
+</li>
 </ul>
 
 <p>A linear workflow was used to analyze and explain the sentiment classification results using each method. Each model was trained on 5 classes of sentiment (1 through 5), with 1 being “strongly negative”, 3 being “neutral” and 5 being “strongly positive”.</p>
 
-<p><img src="lime_explainer/sentiment-workflow.png" alt="" title="Sentiment classification: Training &amp; evaluation pipeline" /></p>
+<p><img src="lime_explainer/sentiment-workflow.png" alt="" title="Sentiment classification: Training &amp; evaluation pipeline"></p>
 
 <p>The goal of this post is to show how to build an explainer dashboard (using any one of three frameworks) that takes in a trained model, and outputs LIME explanations for the prediction made by the model.</p>
 
-<h2 id="example-lime-explanation">Example LIME explanation</h2>
+<h2 id="example-lime-explanation">
+<a class="anchor" href="#example-lime-explanation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example LIME explanation</h2>
 <p>Put simply, LIME generates an explanation object containing visualizations (as embedded JavaScript) that can be output to an HTML file, which can then be opened in any browser. A typical output from LIME is shown below.</p>
 
-<p><img src="lime_explainer/example_lime.png" alt="" title="Example LIME explanation visualized via HTML" /></p>
+<p><img src="lime_explainer/example_lime.png" alt="" title="Example LIME explanation visualized via HTML"></p>
 
-<h2 id="why-build-an-interactive-dashboard-app">Why build an interactive dashboard app?</h2>
+<h2 id="why-build-an-interactive-dashboard-app">
+<a class="anchor" href="#why-build-an-interactive-dashboard-app" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why build an interactive dashboard app?</h2>
 <p>To explain a classifier’s results using LIME, it can be cumbersome to have to write out individual HTML files each time an explanation needs to be made. An interactive dashboard that takes in user input is a very effective means to rapidly iterate through multiple test samples in real time, providing the user with immediate feedback. In addition, having a dashboard allows non-technical users (who may or may not know how to execute Python scripts) to be able to make their own LIME explanations on demand.</p>
 
 <p>The below sections show how we can build LIME explainer dashboards using three different frameworks.</p>
 
-<h1 id="explainer-class">Explainer class</h1>
+<h1 id="explainer-class">
+<a class="anchor" href="#explainer-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>Explainer class</h1>
 <p>To easily reference each classifier’s predict methods, the below object-oriented template is applied to enable code reuse, available in<a href="https://github.com/prrao87/fine-grained-sentiment/blob/master/explainer.py">the project’s GitHub repo</a>. In a nutshell, a Python class is defined which takes in the list of variations generated by LIME (random text samples with tokens blanked out), following which we output a class probability for each sample as a numpy array.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ExampleExplainer</span><span class="p">:</span>
@@ -205,24 +242,29 @@ window.onload = wrap_img;
 
 <p>The below sections describe how to encapsulate all these functions into an interactive dashboard app.</p>
 
-<h1 id="option-1-flask">Option 1: Flask</h1>
+<h1 id="option-1-flask">
+<a class="anchor" href="#option-1-flask" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 1: Flask</h1>
 
-<p>A Flask version of the LIME explainer dashboard is shown below. The user enters a piece of text, selects the number of random samples to generate for LIME, and then chooses from a given list of classifiers using the dropdown menu. Clicking on the <code class="language-plaintext highlighter-rouge">Explain results!</code> button then generates a LIME explanation HTML object, which is rendered within an HTML IFrame.</p>
+<p>A Flask version of the LIME explainer dashboard is shown below. The user enters a piece of text, selects the number of random samples to generate for LIME, and then chooses from a given list of classifiers using the dropdown menu. Clicking on the <code class="language-plaintext highlighter-rouge">Explain results!</code> button then generates a LIME explanation HTML object, which is rendered in an HTML Iframe.</p>
 
-<p><img src="lime_explainer/explainer-app-flask.gif" alt="" title="Flask version of LIME explainer" /></p>
+<p><img src="lime_explainer/explainer-app-flask.gif" alt="" title="Flask version of LIME explainer"></p>
 
-<p>Although Flask isn’t a data dashboarding tool (it is a <a href="https://wsgi.readthedocs.io/">WSGI</a> web framework that began as a wrapper around <a href="https://werkzeug.palletsprojects.com/">Werkzeug</a> and <a href="https://palletsprojects.com/p/jinja/">Jinja</a>), it provides a simple plugin-based architecture from which developers can build interfaces to complex applications. The key strength of Flask is its robustness in a production setting and the numerous extensions around it in the Python ecosystem.</p>
+<p>Although Flask isn’t a data dashboarding tool (it is a <a href="https://wsgi.readthedocs.io/">WSGI</a> web framework that began as a wrapper around <a href="https://werkzeug.palletsprojects.com/">Werkzeug</a> and <a href="https://palletsprojects.com/p/jinja/">Jinja</a>), it provides a simple plugin-based architecture from which developers can build and extend interfaces for complex applications. The key strength of Flask is its robustness in a production setting and the numerous extensions around it in the Python ecosystem.</p>
 
 <p>To build a LIME explainer dashboard using Flask, it is required to know about the following pieces of technology:</p>
 
 <ul>
-  <li><strong>HTML/JavaScript</strong>: A page’s overall structure and content is defined using HTML. Any actions that need to be triggered based on a field’s value or user input needs to be defined using JavaScript, either through the HTML file itself, or loaded from an external source.</li>
-  <li><strong>CSS</strong>: A page’s styles and layout are defined using a CSS file.</li>
-  <li><strong>Jinja2</strong>: This is a templating engine that generates the page’s HTML dynamically from within Python. It is necessary because of security reasons (not using templates and passing around unescaped, static HTML can result in cross-site scripting attacks). The template engine is controlled from within Python, and the final HTML is rendered using Flask methods.</li>
+  <li>
+<strong>HTML/JavaScript</strong>: A page’s overall structure and content is defined using HTML. Any actions that need to be triggered based on a field’s value or user input needs to be defined using JavaScript, either through the HTML file itself, or loaded from an external source.</li>
+  <li>
+<strong>CSS</strong>: A page’s styles and layout are defined using a CSS file.</li>
+  <li>
+<strong>Jinja2</strong>: This is a templating engine that generates the page’s HTML dynamically from within Python. It is necessary because of security reasons (not using templates and passing around unescaped, static HTML can result in cross-site scripting attacks). The template engine is controlled from within Python, and the final HTML is rendered using Flask methods.</li>
 </ul>
 
-<h2 id="flask-app-directory-structure">Flask app: directory structure</h2>
-<p>The directory structure used for the Flask app is shown below. First, the required styles are configured using CSS in the <code class="language-plaintext highlighter-rouge">static/style.css</code> file, and the HTML template to be rendered is defined in <code class="language-plaintext highlighter-rouge">templates/index.html</code>. Any trained sentiment classifier models go into the <code class="language-plaintext highlighter-rouge">models</code> directory. The explainer class is defined in <code class="language-plaintext highlighter-rouge">lime_explainer.py</code> and the Flask routes in <code class="language-plaintext highlighter-rouge">app.py</code>.</p>
+<h2 id="flask-app-directory-structure">
+<a class="anchor" href="#flask-app-directory-structure" aria-hidden="true"><span class="octicon octicon-link"></span></a>Flask app: directory structure</h2>
+<p>The directory structure used for the Flask app is shown below. The required styles are configured using CSS in the <code class="language-plaintext highlighter-rouge">static/style.css</code> file, and the HTML template to be rendered is defined in <code class="language-plaintext highlighter-rouge">templates/index.html</code>. Any trained sentiment classifier models go into the <code class="language-plaintext highlighter-rouge">models</code> directory. The explainer class is defined in <code class="language-plaintext highlighter-rouge">lime_explainer.py</code> and the Flask routes in <code class="language-plaintext highlighter-rouge">app.py</code>.</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.
 ├── models
@@ -236,7 +278,7 @@ window.onload = wrap_img;
 └── lime_explainer.py
 </code></pre></div></div>
 
-<p>The application code in Flask is written in the simplest way possible. Two routes are defined (the default route <code class="language-plaintext highlighter-rouge">'/'</code> and the route for the LIME results, <code class="language-plaintext highlighter-rouge">'result'</code>). Note that the results route uses a <code class="language-plaintext highlighter-rouge">POST</code> request, meaning that it only generates HTML (via Jinja) once the user inputs some information to the app and interacts with it.</p>
+<p>For this use case, the application code in Flask is written in the simplest way possible. Two routes are defined (the default route <code class="language-plaintext highlighter-rouge">'/'</code> and the route for the LIME results, <code class="language-plaintext highlighter-rouge">'result'</code>). Note that the results route uses a <code class="language-plaintext highlighter-rouge">POST</code> request, meaning that it only generates HTML (via Jinja) once the user inputs some information to the app and interacts with it.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">render_template</span>
@@ -273,20 +315,194 @@ window.onload = wrap_img;
     <span class="n">app</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>The code for the Flask app is <a href="https://github.com/prrao87/fine-grained-sentiment-app">available here on GitHub</a>.</p>
+<p>The code for the Flask LIME explainer app is <a href="https://github.com/prrao87/fine-grained-sentiment-app">available here on GitHub</a>.</p>
 
-<h1 id="option-2-dash-by-plotly">Option 2: Dash (by Plotly)</h1>
+<h1 id="option-2-dash-by-plotly">
+<a class="anchor" href="#option-2-dash-by-plotly" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 2: Dash (by Plotly)</h1>
+<p>An alternate approach to designing a LIME dashboard is using Plotly’s <a href="https://plotly.com/dash/">Dash</a> library. Dash is a framework for building analytical web applications in Python. The benefits to using Dash are twofold: developers can design applications using just Python (no JavaScript required), and they have full control over the design and structure of the app via CSS. A LIME explainer app written using Dash is demonstrated below. Just as in the case of the Flask app, clicking on the <code class="language-plaintext highlighter-rouge">Explain results</code> button generates a LIME explanation HTML object, which is rendered via Dash’s wrapper around HTML Iframes.</p>
 
-<h1 id="option-3-streamlit">Option 3: Streamlit</h1>
+<p><img src="lime_explainer/explainer-app-dash.gif" alt="" title="Dash version of LIME explainer"></p>
 
-<h1 id="deployment">Deployment</h1>
+<h2 id="dash-app-directory-structure">
+<a class="anchor" href="#dash-app-directory-structure" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dash app: directory structure</h2>
+<p>The directory structure used for the Dash app is shown below. The required styles are configured using CSS in the <code class="language-plaintext highlighter-rouge">assets/style.css</code> file. Unlike in the Flask example, the HTML layout of the app and the routes/interactions are defined using pure Python, in <code class="language-plaintext highlighter-rouge">app.py</code>. Any trained sentiment classifier models go into the <code class="language-plaintext highlighter-rouge">models</code> directory. The explainer class is defined in <code class="language-plaintext highlighter-rouge">lime_explainer.py</code>.</p>
 
-<h1 id="a-note-on-scalability-in-web-frameworks">A note on scalability in web frameworks</h1>
-<p>WSGI vs. asynchronous event loops.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.
+├── models
+|   ├── classifier1
+|   └── classifier2
+├── assets
+|   └── style.css
+├── app.py
+└── lime_explainer.py
+</code></pre></div></div>
 
-<h1 id="when-does-it-make-the-most-sense-to-use-each-framework">When does it make the most sense to use each framework?</h1>
+<p>The key components of a Dash application’s code are described below. The first is the application layout, which is written in Python using Dash’s HTML wrappers.</p>
 
-<h1 id="conclusions">Conclusions</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ======== App layout ======== 
+</span><span class="n">app</span><span class="p">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">Div</span><span class="p">([</span>
+    <span class="n">html</span><span class="p">.</span><span class="n">H3</span><span class="p">(</span><span class="s">'''
+        LIME Explainer Dashboard for Fine-grained Sentiment
+    '''</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">'text-align'</span><span class="p">:</span> <span class="s">'center'</span><span class="p">}),</span>
+    <span class="n">html</span><span class="p">.</span><span class="n">Label</span><span class="p">(</span><span class="s">'''
+        1: Strongly Negative 2: Weakly Negative 3: Neutral 4: Weakly Positive 5: Strongly Positive
+    '''</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">'text-align'</span><span class="p">:</span> <span class="s">'center'</span><span class="p">}),</span>
+    <span class="n">html</span><span class="p">.</span><span class="n">Br</span><span class="p">(),</span>
+    <span class="n">html</span><span class="p">.</span><span class="n">Label</span><span class="p">(</span><span class="s">'Enter your text:'</span><span class="p">),</span>
+    <span class="n">html</span><span class="p">.</span><span class="n">Div</span><span class="p">(</span>
+        <span class="n">dcc</span><span class="p">.</span><span class="n">Textarea</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="s">'text-input'</span><span class="p">,</span>
+            <span class="n">placeholder</span><span class="o">=</span><span class="s">'Enter text to make class prediction and generate explanations for'</span><span class="p">,</span>
+            <span class="n">className</span><span class="o">=</span><span class="s">'textarea'</span><span class="p">,</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">'width'</span><span class="p">:</span> <span class="s">'100%'</span><span class="p">,</span> <span class="s">'height'</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s">'verticalAlign'</span><span class="p">:</span> <span class="s">'top'</span><span class="p">,</span>
+                <span class="s">'fontFamily'</span><span class="p">:</span> <span class="s">'Arial'</span><span class="p">,</span> <span class="s">'fontColor'</span><span class="p">:</span> <span class="s">'#515151'</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
+        <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">'display'</span><span class="p">:</span> <span class="s">'flex'</span><span class="p">,</span> <span class="s">'justifyContent'</span><span class="p">:</span> <span class="s">'center'</span><span class="p">}</span>
+    <span class="p">),</span>
+<span class="p">])</span>
+</code></pre></div></div>
+<p>Common HTML objects such as headers, labels, text inputs and Iframes can be easily added using Python constructs as shown.</p>
+
+<p>The next component is the <em>callback</em>, which is a reactive, functional piece of code that allows developers to observe, modify and update properties of any component in the UI. In Dash, callbacks are defined using Python’s decorator syntax. Callbacks are extremely powerful ways to encode interactivity in an application, as they track states <em>on button-clicks</em> as well as on data updates. The primary callback used in the LIME explainer is shown below.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s">'text-input'</span><span class="p">,</span> <span class="s">'value'</span><span class="p">),</span>
+              <span class="n">Input</span><span class="p">(</span><span class="s">'reset-button'</span><span class="p">,</span> <span class="s">'n_clicks'</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">clear_form</span><span class="p">(</span><span class="n">n_clicks</span><span class="p">):</span>
+    <span class="s">"""Empty input textarea"""</span>
+    <span class="k">return</span> <span class="s">""</span>
+
+
+<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="s">'explainer-obj'</span><span class="p">,</span> <span class="s">'children'</span><span class="p">),</span>
+              <span class="n">Input</span><span class="p">(</span><span class="s">'submit-button'</span><span class="p">,</span> <span class="s">'n_clicks'</span><span class="p">),</span>
+              <span class="n">Input</span><span class="p">(</span><span class="s">'reset-button'</span><span class="p">,</span> <span class="s">'n_clicks'</span><span class="p">),</span>
+              <span class="n">State</span><span class="p">(</span><span class="s">'case-dropdown'</span><span class="p">,</span> <span class="s">'value'</span><span class="p">),</span>
+              <span class="n">State</span><span class="p">(</span><span class="s">'num-samples-input'</span><span class="p">,</span> <span class="s">'value'</span><span class="p">),</span>
+              <span class="n">State</span><span class="p">(</span><span class="s">'text-input'</span><span class="p">,</span> <span class="s">'value'</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">generate_explainer_html</span><span class="p">(</span><span class="n">submit_n_clicks</span><span class="p">,</span> <span class="n">reset_n_clicks</span><span class="p">,</span> <span class="n">case</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">dash</span><span class="p">.</span><span class="n">callback_context</span>  <span class="c1"># Capture callback context to track button clicks
+</span>    <span class="n">empty_obj</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">Iframe</span><span class="p">(</span>
+        <span class="n">srcDoc</span><span class="o">=</span><span class="s">'''&lt;div&gt;Enter input text to see LIME explanations.&lt;/div&gt;'''</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="s">'100%'</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="s">'100px'</span><span class="p">,</span>
+        <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">'border'</span><span class="p">:</span> <span class="s">'2px #d3d3d3 solid'</span><span class="p">},</span>
+        <span class="n">hidden</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span> <span class="ow">or</span> <span class="s">"reset"</span> <span class="ow">in</span> <span class="n">ctx</span><span class="p">.</span><span class="n">triggered</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">"prop_id"</span><span class="p">]:</span>
+        <span class="c1"># Return empty Iframe
+</span>        <span class="n">obj</span> <span class="o">=</span> <span class="n">empty_obj</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Tokenize text using spaCy
+</span>        <span class="n">text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">exp</span> <span class="o">=</span> <span class="n">explainer</span><span class="p">(</span><span class="n">case</span><span class="p">,</span>
+                        <span class="n">path_to_file</span><span class="o">=</span><span class="n">METHODS</span><span class="p">[</span><span class="n">case</span><span class="p">][</span><span class="s">'file'</span><span class="p">],</span>
+                        <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                        <span class="n">lowercase</span><span class="o">=</span><span class="n">METHODS</span><span class="p">[</span><span class="n">case</span><span class="p">][</span><span class="s">'lowercase'</span><span class="p">],</span>
+                        <span class="n">num_samples</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">n_samples</span><span class="p">))</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">Iframe</span><span class="p">(</span>
+            <span class="c1"># Javascript is disabled from running in an Iframe for security reasons
+</span>            <span class="c1"># Static HTML only!!!
+</span>            <span class="n">srcDoc</span><span class="o">=</span><span class="n">exp</span><span class="p">.</span><span class="n">as_html</span><span class="p">(),</span>
+            <span class="n">width</span><span class="o">=</span><span class="s">'100%'</span><span class="p">,</span>
+            <span class="n">height</span><span class="o">=</span><span class="s">'800px'</span><span class="p">,</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s">'border'</span><span class="p">:</span> <span class="s">'2px #d3d3d3 solid'</span><span class="p">},</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span>
+</code></pre></div></div>
+<p>As per the above construct, we pass the user’s button click (either the “Submit” or the “Clear” button), as well as the <em>states</em> of the dropdown menu, number of samples entered in the text input, and the text sample for which we want to predict the sentiment. Tracking the state (as opposed to just the <em>value</em>) of each text field here is important — it allows us to tie the execution of the callback to the <em>button click</em>, rather than executing it every time a value in the text input is updated.</p>
+
+<p>The code for the Dash LIME explainer app is <a href="https://github.com/prrao87/fine-grained-sentiment-app-dash">available here on GitHub</a>.</p>
+
+<h1 id="option-3-streamlit">
+<a class="anchor" href="#option-3-streamlit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Option 3: Streamlit</h1>
+<p>Another alternative is to use <a href="https://www.streamlit.io/">Streamlit</a> to build the explainer app. This is by far the fastest approach, requiring a very basic knowledge of web development and the fewest lines of code. Unlike the Flask and Dash approaches, the Streamlit app uses its own styles and layout (no customizations via CSS are possible, at least using conventional means). The Streamlit LIME explainer app is shown in action, below.</p>
+
+<p><img src="lime_explainer/explainer-app-streamlit.gif" alt="" title="Streamlit version of LIME explainer"></p>
+
+<p>Because Streamlit is designed from the ground up to assist in the fast creation and sharing of web apps, the LIME dashboard app has an exceptionally simple directory structure. All the code for the web application is written in a single file, <code class="language-plaintext highlighter-rouge">app.py</code> — this includes widgets, structure, interactions and all user inputs to make LIME predictions. The remarkable aspect of this design is that even with all this functionality crammed into one file, it is still very concise (~40 lines of code). As a result, we only use separate directories for application-specific entities, such as models and data.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.
+├── models
+|   ├── classifier1
+|   └── classifier2
+├── app.py
+└── lime_explainer.py
+</code></pre></div></div>
+
+<p>The entire code for the Streamlit dashboard is shown below.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Build app
+</span><span class="n">title_text</span> <span class="o">=</span> <span class="s">'LIME Explainer Dashboard for Fine-grained Sentiment'</span>
+<span class="n">subheader_text</span> <span class="o">=</span> <span class="s">'''1: Strongly Negative &amp;nbsp 2: Weakly Negative &amp;nbsp  3: Neutral &amp;nbsp  4: Weakly Positive &amp;nbsp  5: Strongly Positive'''</span>
+
+<span class="n">st</span><span class="p">.</span><span class="n">markdown</span><span class="p">(</span><span class="s">f"&lt;h2 style='text-align: center;'&gt;&lt;b&gt;</span><span class="si">{</span><span class="n">title_text</span><span class="si">}</span><span class="s">&lt;/b&gt;&lt;/h2&gt;"</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">st</span><span class="p">.</span><span class="n">markdown</span><span class="p">(</span><span class="s">f"&lt;h5 style='text-align: center;'&gt;</span><span class="si">{</span><span class="n">subheader_text</span><span class="si">}</span><span class="s">&lt;/h5&gt;"</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">st</span><span class="p">.</span><span class="n">text</span><span class="p">(</span><span class="s">""</span><span class="p">)</span>
+<span class="n">input_text</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">text_input</span><span class="p">(</span><span class="s">'Enter your text:'</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
+<span class="n">n_samples</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">text_input</span><span class="p">(</span><span class="s">'Number of samples to generate for LIME explainer: (For really long input text, go up to 5000)'</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">method_list</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">label</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">METHODS</span><span class="p">.</span><span class="n">items</span><span class="p">())</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">st</span><span class="p">.</span><span class="n">selectbox</span><span class="p">(</span>
+    <span class="s">'Choose classifier:'</span><span class="p">,</span>
+    <span class="n">method_list</span><span class="p">,</span>
+    <span class="n">index</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">format_func</span><span class="o">=</span><span class="n">format_dropdown_labels</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="n">st</span><span class="p">.</span><span class="n">button</span><span class="p">(</span><span class="s">"Explain Results"</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">st</span><span class="p">.</span><span class="n">spinner</span><span class="p">(</span><span class="s">'Calculating...'</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">input_text</span><span class="p">)</span>
+        <span class="n">exp</span> <span class="o">=</span> <span class="n">explainer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span>
+                        <span class="n">path_to_file</span><span class="o">=</span><span class="n">METHODS</span><span class="p">[</span><span class="n">method</span><span class="p">][</span><span class="s">'file'</span><span class="p">],</span>
+                        <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                        <span class="n">lowercase</span><span class="o">=</span><span class="n">METHODS</span><span class="p">[</span><span class="n">method</span><span class="p">][</span><span class="s">'lowercase'</span><span class="p">],</span>
+                        <span class="n">num_samples</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">n_samples</span><span class="p">))</span>
+        <span class="c1"># Display explainer HTML object
+</span>        <span class="n">components</span><span class="p">.</span><span class="n">html</span><span class="p">(</span><span class="n">exp</span><span class="p">.</span><span class="n">as_html</span><span class="p">(),</span> <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Headers are written in markdown syntax. Note that because Streamlit is designed for speed and ease of use, it does not allow easy access to the underlying HTML, unlike Flask and Dash. As a result, we are required to explicitly enable unsafe rendering of raw HTML (using the <code class="language-plaintext highlighter-rouge">unsafe_allow_html</code> keyword) to obtain centre-aligned headers in this case. The HTML output from the LIME explainer is then rendered using a <a href="https://docs.streamlit.io/en/stable/develop_streamlit_components.html">Streamlit HTML component</a>, which is a custom component that displays the HTML string in an Iframe.</p>
+
+<p>The code for the Streamlit LIME explainer app is <a href="https://github.com/prrao87/fine-grained-sentiment-app-streamlit">available here on GitHub</a>.</p>
+
+<h1 id="deployment">
+<a class="anchor" href="#deployment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deployment</h1>
+<p>For the purposes of this post, all three apps were deployed using <a href="https://www.heroku.com/what#">Heroku</a>, a PaaS system that enables developers to build, run and operate applications on the cloud. Each of the three frameworks used to build the app have good deployment guides for Heroku, shown below.</p>
+
+<ul>
+  <li>Flask: <a href="https://stackabuse.com/deploying-a-flask-application-to-heroku/">Deploying a Flask Application to Heroku</a>
+</li>
+  <li>Dash: <a href="https://dash.plotly.com/deployment">Deploying Dash apps</a>
+</li>
+  <li>Streamlit: <a href="https://towardsdatascience.com/deploy-streamlit-on-heroku-9c87798d2088">How to deploy Streamlit on Heroku</a>
+</li>
+</ul>
+
+<p>However, it is also relatively straightforward to deploy Flask or Dash apps using a production-grade WSGI web server, such as <a href="https://gunicorn.org/">gunicorn</a> and a load balancer such as <a href="https://www.nginx.com/">Nginx</a>. During deployment, Nginx <a href="https://www.digitalocean.com/community/tutorials/how-to-deploy-python-wsgi-apps-using-gunicorn-http-server-behind-nginx">acts as a reverse proxy that sits in front of the web server</a>, to handle a large number of requests with a high degree of reliability. Similarly, Streamlit also offers a means to <a href="https://docs.streamlit.io/en/stable/streamlit_faq.html">manually deploy apps</a> using a combination of Docker and/or Nginx.</p>
+
+<h1 id="a-note-on-scalability-in-python-web-frameworks">
+<a class="anchor" href="#a-note-on-scalability-in-python-web-frameworks" aria-hidden="true"><span class="octicon octicon-link"></span></a>A note on scalability in Python web frameworks</h1>
+<p>The Web Server Gateway Interface (WSGI) is a <a href="https://www.python.org/dev/peps/pep-3333/">Python specification</a> developed as a standard for Python web frameworks to interact with web servers. Having such a system makes it easy for developers to place a service such as Nginx in front of the Python web application (e.g., written in Flask or Dash) as a reverse proxy that forwards all requests to the web application. <strong>A key property of WSGI-compatible servers is that they are synchronous</strong>. This means that each request <em>blocks</em> the server until it receives a response from the application, termed a <em>blocking operation</em>. The typical way WSGI servers incorporate scalability is through the use of multithreading, where a new thread is created for each request in order to be able to handle multiple requests simultaneously. This is then combined with running multiple worker processes of the web server, which does scale well, but is limited by the number of physical cores available on a given machine.</p>
+
+<p>The WSGI approach, as used by frameworks like Flask and Dash, can cap out in terms of scaling if there are a very large number of requests coming in. The way this is addressed in production systems is by scaling <em>horizontally</em>, i.e., adding more and more servers, and using load balancing services like Nginx that can evenly distribute the load between all servers during times of high request volumes.</p>
+
+<p>Recent Python web app frameworks like Streamlit, instead rely on a different concurrency system altogether. Streamlit uses a <a href="https://www.tornadoweb.org/en/stable/">Tornado</a> web server under the hood, which was designed from the ground up to use <a href="https://www.tornadoweb.org/en/stable/guide/async.html">asynchronous event loops</a>. In this system, a single thread is used, which implements <em>non-blocking</em> functions that execute in order of arrival. This approach can easily achieve a very high degree of concurrency in the web application, which, in apps that rely largely on I/O bound operations, can really help scale the system to handle a large volume of requests simultaneously.</p>
+
+<p>As always, there is no one single rule to decide which concurrency approach is better than the other. Depending on the exact use case and the application at hand, either a WSGI-based or asynchronous event loop-driven service can be a suitable option.</p>
+
+<blockquote>
+  <p>Further reading: <a href="https://www.475cumulus.com/single-post/2017/04/03/WSGI-Is-Not-Enough-Anymore">WSGI is Not Enough Anymore</a> - Parts I, II and III</p>
+</blockquote>
+
+<h1 id="when-does-it-make-the-most-sense-to-use-each-framework">
+<a class="anchor" href="#when-does-it-make-the-most-sense-to-use-each-framework" aria-hidden="true"><span class="octicon octicon-link"></span></a>When does it make the most sense to use each framework?</h1>
+
+<h2 id="flask">
+<a class="anchor" href="#flask" aria-hidden="true"><span class="octicon octicon-link"></span></a>Flask</h2>
+<p>While it may seem simple to dismiss more verbose frameworks like Flask in this day and age, it is important to keep in mind the benefits of exposing low-level features to the developer.</p>
+
+<h1 id="conclusions">
+<a class="anchor" href="#conclusions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusions</h1>
 
   </div><!-- from https://github.com/utterance/utterances -->
 <script src="https://utteranc.es/client.js"
