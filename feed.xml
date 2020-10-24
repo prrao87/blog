@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://prrao87.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://prrao87.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-22T20:37:12-05:00</updated><id>https://prrao87.github.io/blog/feed.xml</id><title type="html">Inverse Entropy</title><subtitle>A place for data science, machine learning, NLP and other interesting computing topics.</subtitle><entry><title type="html">Build a LIME explainer dashboard with the fewest lines of code</title><link href="https://prrao87.github.io/blog/lime-explainer-dashboards/" rel="alternate" type="text/html" title="Build a LIME explainer dashboard with the fewest lines of code" /><published>2020-10-22T00:00:00-05:00</published><updated>2020-10-22T00:00:00-05:00</updated><id>https://prrao87.github.io/blog/building-lime-explainer-dashboards</id><content type="html" xml:base="https://prrao87.github.io/blog/lime-explainer-dashboards/">&lt;p&gt;&lt;img src=&quot;../images/posts/doors.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://prrao87.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://prrao87.github.io/blog/" rel="alternate" type="text/html" /><updated>2020-10-24T13:15:08-05:00</updated><id>https://prrao87.github.io/blog/feed.xml</id><title type="html">Inverse Entropy</title><subtitle>A place for data science, machine learning, NLP and other interesting computing topics.</subtitle><entry><title type="html">Build a LIME explainer dashboard with the fewest lines of code</title><link href="https://prrao87.github.io/blog/lime-explainer-dashboards/" rel="alternate" type="text/html" title="Build a LIME explainer dashboard with the fewest lines of code" /><published>2020-10-24T00:00:00-05:00</published><updated>2020-10-24T00:00:00-05:00</updated><id>https://prrao87.github.io/blog/building-lime-explainer-dashboards</id><content type="html" xml:base="https://prrao87.github.io/blog/lime-explainer-dashboards/">&lt;p&gt;&lt;img src=&quot;../images/posts/doors.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&quot;background&quot;&gt;Background&lt;/h1&gt;
 
@@ -12,14 +12,14 @@
 
 &lt;p&gt;A linear workflow was used to analyze and explain the sentiment classification results using each method. Each model was trained on 5 classes of sentiment (1 through 5), with 1 being “strongly negative”, 3 being “neutral” and 5 being “strongly positive”.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;lime_explainer/sentiment-workflow.png&quot; alt=&quot;&quot; title=&quot;Sentiment classification: Training &amp;amp; evaluation pipeline&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/posts/lime_explainer/sentiment-workflow.png&quot; alt=&quot;&quot; title=&quot;Sentiment classification: Training &amp;amp; evaluation pipeline&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The goal of this post is to show how to build an explainer dashboard (using any one of three frameworks) that takes in a trained model, and outputs LIME explanations for the prediction made by the model.&lt;/p&gt;
 
 &lt;h2 id=&quot;example-lime-explanation&quot;&gt;Example LIME explanation&lt;/h2&gt;
 &lt;p&gt;Put simply, LIME generates an explanation object containing visualizations (as embedded JavaScript) that can be output to an HTML file, which can then be opened in any browser. A typical output from LIME is shown below.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;lime_explainer/example_lime.png&quot; alt=&quot;&quot; title=&quot;Example LIME explanation visualized via HTML&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/posts/lime_explainer/example_lime.png&quot; alt=&quot;&quot; title=&quot;Example LIME explanation visualized via HTML&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;why-build-an-interactive-dashboard-app&quot;&gt;Why build an interactive dashboard app?&lt;/h2&gt;
 &lt;p&gt;To explain a classifier’s results using LIME, it can be cumbersome to have to write out individual HTML files each time an explanation needs to be made. An interactive dashboard that takes in user input is a very effective means to rapidly iterate through multiple test samples in real time, providing the user with immediate feedback. In addition, having a dashboard allows non-technical users (who may or may not know how to execute Python scripts) to be able to make their own LIME explanations on demand.&lt;/p&gt;
@@ -85,7 +85,7 @@
 
 &lt;p&gt;A Flask version of the LIME explainer dashboard is shown below. The user enters a piece of text, selects the number of random samples to generate for LIME, and then chooses from a given list of classifiers using the dropdown menu. Clicking on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Explain results!&lt;/code&gt; button then generates a LIME explanation HTML object, which is rendered in an HTML Iframe.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;lime_explainer/explainer-app-flask.gif&quot; alt=&quot;&quot; title=&quot;Flask version of LIME explainer&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/posts/lime_explainer/explainer-app-flask.gif&quot; alt=&quot;&quot; title=&quot;Flask version of LIME explainer&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Although Flask isn’t a data dashboarding tool (it is a &lt;a href=&quot;https://wsgi.readthedocs.io/&quot;&gt;WSGI&lt;/a&gt; web framework that began as a wrapper around &lt;a href=&quot;https://werkzeug.palletsprojects.com/&quot;&gt;Werkzeug&lt;/a&gt; and &lt;a href=&quot;https://palletsprojects.com/p/jinja/&quot;&gt;Jinja&lt;/a&gt;), it provides a simple plugin-based architecture from which developers can build and extend interfaces for complex applications. The key strength of Flask is its robustness in a production setting and the numerous extensions around it in the Python ecosystem.&lt;/p&gt;
 
@@ -154,7 +154,7 @@
 &lt;h1 id=&quot;option-2-dash-by-plotly&quot;&gt;Option 2: Dash (by Plotly)&lt;/h1&gt;
 &lt;p&gt;An alternate approach to designing a LIME dashboard is using Plotly’s &lt;a href=&quot;https://plotly.com/dash/&quot;&gt;Dash&lt;/a&gt; library. Dash is a framework for building analytical web applications in Python. The benefits to using Dash are twofold: developers can design applications using just Python (no JavaScript required), and they have full control over the design and structure of the app via CSS. A LIME explainer app written using Dash is demonstrated below. Just as in the case of the Flask app, clicking on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Explain results&lt;/code&gt; button generates a LIME explanation HTML object, which is rendered via Dash’s wrapper around HTML Iframes.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;lime_explainer/explainer-app-dash.gif&quot; alt=&quot;&quot; title=&quot;Dash version of LIME explainer&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/posts/lime_explainer/explainer-app-dash.gif&quot; alt=&quot;&quot; title=&quot;Dash version of LIME explainer&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;dash-app-directory-structure&quot;&gt;Dash app: directory structure&lt;/h2&gt;
 &lt;p&gt;The directory structure used for the Dash app is shown below. The required styles are configured using CSS in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;assets/style.css&lt;/code&gt; file. Unlike in the Flask example, the HTML layout of the app and the routes/interactions are defined using pure Python, in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.py&lt;/code&gt;. Any trained sentiment classifier models go into the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;models&lt;/code&gt; directory. The explainer class is defined in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lime_explainer.py&lt;/code&gt;.&lt;/p&gt;
@@ -249,9 +249,9 @@
 &lt;h1 id=&quot;option-3-streamlit&quot;&gt;Option 3: Streamlit&lt;/h1&gt;
 &lt;p&gt;Another alternative is to use &lt;a href=&quot;https://www.streamlit.io/&quot;&gt;Streamlit&lt;/a&gt; to build the explainer app. This is by far the fastest approach, requiring a very basic knowledge of web development and the fewest lines of code. Unlike the Flask and Dash approaches, the Streamlit app uses its own styles and layout (no customizations via CSS are possible, at least using conventional means). The Streamlit LIME explainer app is shown in action, below.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;lime_explainer/explainer-app-streamlit.gif&quot; alt=&quot;&quot; title=&quot;Streamlit version of LIME explainer&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/posts/lime_explainer/explainer-app-streamlit.gif&quot; alt=&quot;&quot; title=&quot;Streamlit version of LIME explainer&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Because Streamlit is designed from the ground up to assist in the fast creation and sharing of web apps, the LIME dashboard app has an exceptionally simple directory structure. All the code for the web application is written in a single file, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.py&lt;/code&gt; — this includes widgets, structure, interactions and all user inputs to make LIME predictions. The remarkable aspect of this design is that even with all this functionality crammed into one file, it is still very concise (~40 lines of code). As a result, we only use separate directories for application-specific entities, such as models and data.&lt;/p&gt;
+&lt;p&gt;Because Streamlit is designed from the ground up to assist in the fast creation and sharing of web apps, the LIME dashboard app has an exceptionally simple directory structure. All the code for the web application is written in a single file, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.py&lt;/code&gt; — this includes widgets, structure, interactions and all user inputs to make LIME predictions. The remarkable aspect of this design is that even with all this functionality crammed into one file, it is still very concise (~40 lines of code!). As a result, we only use separate directories for application-specific entities, such as models and data.&lt;/p&gt;
 
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
 ├── models
@@ -292,7 +292,7 @@
 &lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;components&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;as_html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;800&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Headers are written in markdown syntax. Note that because Streamlit is designed for speed and ease of use, it does not allow easy access to the underlying HTML, unlike Flask and Dash. As a result, we are required to explicitly enable unsafe rendering of raw HTML (using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unsafe_allow_html&lt;/code&gt; keyword) to obtain centre-aligned headers in this case. The HTML output from the LIME explainer is then rendered using a &lt;a href=&quot;https://docs.streamlit.io/en/stable/develop_streamlit_components.html&quot;&gt;Streamlit HTML component&lt;/a&gt;, which is a custom component that displays the HTML string in an Iframe.&lt;/p&gt;
+&lt;p&gt;Headers are written in markdown syntax. Note that because Streamlit’s API is designed for speed and ease of use, it does not allow easy access to the underlying HTML, unlike Flask and Dash. As a result, we are required to explicitly use unsafe rendering of raw HTML strings (using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unsafe_allow_html&lt;/code&gt; keyword) to obtain centre-aligned headers in this case. The HTML output from the LIME explainer is then rendered using a &lt;a href=&quot;https://docs.streamlit.io/en/stable/develop_streamlit_components.html&quot;&gt;Streamlit HTML component&lt;/a&gt;, which is a custom component that displays the HTML string in an Iframe.&lt;/p&gt;
 
 &lt;p&gt;The code for the Streamlit LIME explainer app is &lt;a href=&quot;https://github.com/prrao87/fine-grained-sentiment-app-streamlit&quot;&gt;available here on GitHub&lt;/a&gt;.&lt;/p&gt;
 
@@ -321,11 +321,52 @@
 &lt;/blockquote&gt;
 
 &lt;h1 id=&quot;when-does-it-make-the-most-sense-to-use-each-framework&quot;&gt;When does it make the most sense to use each framework?&lt;/h1&gt;
+&lt;p&gt;This section discusses the situations in which each framework is the most suitable for the task at hand.&lt;/p&gt;
 
 &lt;h2 id=&quot;flask&quot;&gt;Flask&lt;/h2&gt;
-&lt;p&gt;While it may seem simple to dismiss more verbose frameworks like Flask in this day and age, it is important to keep in mind the benefits of exposing low-level features to the developer.&lt;/p&gt;
+&lt;p&gt;The power of Flask lies in its ability to allow developers to use &lt;em&gt;any&lt;/em&gt; combination of front-end tools to create a web application. This includes form-entry extensions, such as &lt;a href=&quot;https://wtforms.readthedocs.io/en/stable/&quot;&gt;WTForms&lt;/a&gt; and &lt;a href=&quot;https://flask-login.readthedocs.io/en/latest/&quot;&gt;Flask-Login&lt;/a&gt;, as well as JavaScript visualization libraries (&lt;a href=&quot;https://www.highcharts.com/&quot;&gt;Highcharts&lt;/a&gt; or &lt;a href=&quot;https://d3js.org/&quot;&gt;D3&lt;/a&gt;). In addition, Flask provides developers full access to the underlying page structure and user interactions, via HTML, CSS, jQuery and &lt;a href=&quot;https://pythonhosted.org/Flask-Bootstrap/&quot;&gt;Bootstrap&lt;/a&gt;, allowing a huge amount of flexibility in building very complex applications based on the project’s requirements.&lt;/p&gt;
 
-&lt;h1 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h1&gt;</content><author><name>Prashanth Rao</name></author><category term="nlp" /><category term="dataviz" /><category term="web-app" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://prrao87.github.io/blog/images/posts/doors.jpg" /><media:content medium="image" url="https://prrao87.github.io/blog/images/posts/doors.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Blogging for Data Scientists: Moving Away from Medium</title><link href="https://prrao87.github.io/blog/blogging-for-data-scientists/" rel="alternate" type="text/html" title="Blogging for Data Scientists: Moving Away from Medium" /><published>2020-05-03T00:00:00-05:00</published><updated>2020-05-03T00:00:00-05:00</updated><id>https://prrao87.github.io/blog/blogging-for-data-scientists</id><content type="html" xml:base="https://prrao87.github.io/blog/blogging-for-data-scientists/">&lt;p&gt;&lt;img src=&quot;../images/posts/laptop.jpeg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;With regard to the LIME explainer dashboard shown in this post, Flask is an excellent option for any one of the following scenarios:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The app is written by a team with expertise in JavaScript, HTML and CSS, as well as the different HTTP request methods (GET, POST, etc.)&lt;/li&gt;
+  &lt;li&gt;The app is a part of a much larger dashboard powered by a JavaScript framework on the front end&lt;/li&gt;
+  &lt;li&gt;Multiple RESTful endpoints that process and serve data already exist (following which the LIME explainer can just be written as another endpoint feeding into the front end)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;dash&quot;&gt;Dash&lt;/h2&gt;
+&lt;p&gt;Dash is a great option for developers that require a high degree of customizability for their applications while working primarily in a Python. A number of powerful front end visualization tools (from the &lt;a href=&quot;https://plotly.com/javascript/&quot;&gt;Plotly.js&lt;/a&gt; JavaScript library) are provided right out of the box, allowing developers to focus primarily on styling their apps and adding user interactions. Because Dash is built on top of Flask, it follows a similar deployment strategy as that of Flask, making it very easy to use for teams that already have experience implementing Flask apps in production.&lt;/p&gt;
+
+&lt;p&gt;In general, Dash is an excellent option to build a LIME explainer dashboard in any one of the following scenarios:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The app needs to be written to integrate with an existing Flask application&lt;/li&gt;
+  &lt;li&gt;The team developing and deploying the app is experienced in Python (but not so much in JavaScript)&lt;/li&gt;
+  &lt;li&gt;A good degree of customization is required for the dashboard (which Dash allows by providing developers access to the underlying CSS)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;streamlit&quot;&gt;Streamlit&lt;/h2&gt;
+&lt;p&gt;As a relative newcomer to the ecosystem, Streamlit shines in situations where a team of data scientists needs to quickly share their work with a larger team using an interactive app. It also works fabulously for an individual data scientist to quickly and interactively explore a dataset or the performance of a model on individual samples.&lt;/p&gt;
+
+&lt;p&gt;For the LIME explainer dashboard, Streamlit is a great alternative to use in any of the following scenarios:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The app is written by a team (or individual) with minimal web development experience&lt;/li&gt;
+  &lt;li&gt;The app needs to be rapidly built in the least time and using the fewest lines of code possible&lt;/li&gt;
+  &lt;li&gt;Developers want to spend more time building interactive tools and the least time possible in customizing the appearance of the application&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h1&gt;
+&lt;p&gt;This post highlighted three different approaches to building a LIME explainer interactive dashboard application. Streamlit is by far the least verbose and easiest to learn among all the options. Flask requires the most upfront time investment, in terms of learning the various pieces that fit together (HTML, CSS, jQuery/JavaScript, Jinja and HTTP requests methods). Plotly Dash sits nicely in between Flask and Streamlit, in terms of complexity and initial effort to get the dashboard up and running. Depending on the composition and skill set of the team undertaking such a project, any of the three options can be the most suitable.&lt;/p&gt;
+
+&lt;p&gt;The primary reason to build a LIME dashboard as shown is to allow people that aren’t data scientists to study an NLP classifier’s results. Providing an interactive means to test individual samples’ results on the fly can help diagnose problems with the model and improve model interpretability, at least to some extent. Feel free to use the customize the code from each repo (shown below) for your own use case!&lt;/p&gt;
+
+&lt;h2 id=&quot;links-to-the-code-for-each-dashboard&quot;&gt;Links to the code for each dashboard&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/prrao87/fine-grained-sentiment-app&quot;&gt;LIME explainer app: Flask&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/prrao87/fine-grained-sentiment-app-dash&quot;&gt;LIME explainer app: Dash&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/prrao87/fine-grained-sentiment-app-streamlit&quot;&gt;LIME explainer app: Streamlit&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Prashanth Rao</name></author><category term="nlp" /><category term="dataviz" /><category term="web-app" /><summary type="html"></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://prrao87.github.io/blog/images/posts/doors.jpg" /><media:content medium="image" url="https://prrao87.github.io/blog/images/posts/doors.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Blogging for Data Scientists: Moving Away from Medium</title><link href="https://prrao87.github.io/blog/blogging-for-data-scientists/" rel="alternate" type="text/html" title="Blogging for Data Scientists: Moving Away from Medium" /><published>2020-05-03T00:00:00-05:00</published><updated>2020-05-03T00:00:00-05:00</updated><id>https://prrao87.github.io/blog/blogging-for-data-scientists</id><content type="html" xml:base="https://prrao87.github.io/blog/blogging-for-data-scientists/">&lt;p&gt;&lt;img src=&quot;../images/posts/laptop.jpeg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;I recently began using &lt;a href=&quot;https://github.com/fastai/fastpages&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fastpages&lt;/code&gt;&lt;/a&gt;, a blogging platform based on GitHub Pages and Jekyll, that makes it easier to write technical blog posts using Jupyter notebooks. Over the years, I’d become accustomed to the familiarity and simplicity of Medium’s interface. Although migrating to a custom static blog site is quite intimidating for someone like me who’s never done it before, I decided to go ahead with it anyway. I also began thinking about what it is that makes me blog in the first place. And the more I thought about it, the more I realized Medium wasn’t the right platform for me any more. If you’re a Data Scientist, or anyone in computing who likes writing blog posts with code snippets and discussing workflows, seriously, please, reconsider using Medium as your default option.&lt;/p&gt;
 
