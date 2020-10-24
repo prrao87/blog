@@ -2,7 +2,7 @@
 title: "Build a LIME explainer dashboard with the fewest lines of code"
 description: "A comparison of Flask, Plotly Dash and Streamlit to build dashboards that provide LIME explanations for classification results"
 toc: true
-comments: false
+comments: true
 layout: post
 image: "images/posts/doors.jpg"
 author: Prashanth Rao
