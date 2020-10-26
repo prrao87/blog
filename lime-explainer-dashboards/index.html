@@ -488,7 +488,7 @@ window.onload = wrap_img;
 
 <h1 id="a-note-on-scalability-in-python-web-frameworks">
 <a class="anchor" href="#a-note-on-scalability-in-python-web-frameworks" aria-hidden="true"><span class="octicon octicon-link"></span></a>A note on scalability in Python web frameworks</h1>
-<p>The Web Server Gateway Interface (WSGI) is a <a href="https://www.python.org/dev/peps/pep-3333/">Python specification</a> developed as a standard for Python web frameworks to interact with web servers. Having such a system makes it easy for developers to place a service such as Nginx in front of the Python web application (e.g., written in Flask or Dash) as a reverse proxy that forwards all requests to the web application. <strong>A key property of WSGI-compatible servers is that they are synchronous</strong>. This means that each request <em>blocks</em> the server until it receives a response from the application, termed a <em>blocking operation</em>. The typical way WSGI servers incorporate scalability is through the use of multithreading, where a new thread is created for each request in order to be able to handle multiple requests simultaneously. This is then combined with running multiple worker processes of the web server, which does scale well, but is limited by the number of physical cores available on a given machine.</p>
+<p>The Web Server Gateway Interface (WSGI) is a <a href="https://www.python.org/dev/peps/pep-3333/">Python specification</a> developed as a standard for Python web frameworks to interact with web servers. Having such a system makes it easy for developers to place a service such as Nginx in front of the Python web application (e.g., written in Flask or Dash) as a reverse proxy that forwards all requests to the web application. <strong>A key property of WSGI-compatible servers is that they are synchronous</strong>. This means that each request <em>blocks</em> the server until it receives a response from the application, termed a <em>blocking operation</em>. The way WSGI servers typically incorporate scalability is through the use of multithreading, where a new thread is created for each request in order to be able to handle multiple requests simultaneously. This is then combined with running multiple worker processes of the web server, which does scale well, but is limited by the number of physical cores available on a given machine.</p>
 
 <p>The WSGI approach, as used by frameworks like Flask and Dash, can cap out in terms of scaling if there are a very large number of requests coming in. The way this is addressed in production systems is by scaling <em>horizontally</em>, i.e., adding more and more servers, and using load balancing services like Nginx that can evenly distribute the load between all servers during times of high request volumes.</p>
 
@@ -518,7 +518,7 @@ window.onload = wrap_img;
 
 <h2 id="dash">
 <a class="anchor" href="#dash" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dash</h2>
-<p>Dash is a great option for developers that require a high degree of customizability for their applications while working primarily in a Python. A number of powerful front end visualization tools (from the <a href="https://plotly.com/javascript/">Plotly.js</a> JavaScript library) are provided right out of the box, allowing developers to focus primarily on styling their apps and adding user interactions. Because Dash is built on top of Flask, it follows a similar deployment strategy as that of Flask, making it very easy to use for teams that already have experience implementing Flask apps in production.</p>
+<p>Dash is a great option for developers that require a high degree of customizability for their applications while working primarily in a Python environment. A number of powerful front end visualization tools (from the <a href="https://plotly.com/javascript/">Plotly.js</a> JavaScript library) are provided right out of the box, allowing developers to focus primarily on styling their apps and adding user interactions. Because Dash is built on top of Flask, it follows a similar deployment strategy as that of Flask, making it very easy to use for teams that already have experience implementing Flask apps in production.</p>
 
 <p>In general, Dash is an excellent option to build a LIME explainer dashboard in any one of the following scenarios:</p>
 
@@ -530,7 +530,7 @@ window.onload = wrap_img;
 
 <h2 id="streamlit">
 <a class="anchor" href="#streamlit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Streamlit</h2>
-<p>As a relative newcomer to the ecosystem, Streamlit shines in situations where a team of data scientists needs to quickly share their work with a larger team using an interactive app. It also works fabulously for an individual data scientist to quickly and interactively explore a dataset or the performance of a model on individual samples.</p>
+<p>As a relative newcomer to the ecosystem, Streamlit shines in situations where data scientists need to quickly share their work with a larger team using an interactive app. It also works fabulously for an individual data scientist to quickly and interactively explore a dataset or the performance of a model on individual samples.</p>
 
 <p>For the LIME explainer dashboard, Streamlit is a great alternative to use in any of the following scenarios:</p>
 
