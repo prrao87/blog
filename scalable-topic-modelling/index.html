@@ -4,17 +4,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Tags | Inverse Entropy</title>
+<title>Scalable topic modelling: Comparing Gensim and PySpark | Inverse Entropy</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Tags" />
+<meta property="og:title" content="Scalable topic modelling: Comparing Gensim and PySpark" />
+<meta name="author" content="Prashanth Rao" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="A place for data science, machine learning, NLP and other interesting computing topics." />
-<meta property="og:description" content="A place for data science, machine learning, NLP and other interesting computing topics." />
-<link rel="canonical" href="https://prrao87.github.io/blog/categories/" />
-<meta property="og:url" content="https://prrao87.github.io/blog/categories/" />
+<meta name="description" content="Developing a scalable, robust topic modelling process for large document collections in Python" />
+<meta property="og:description" content="Developing a scalable, robust topic modelling process for large document collections in Python" />
+<link rel="canonical" href="https://prrao87.github.io/blog/scalable-topic-modelling/" />
+<meta property="og:url" content="https://prrao87.github.io/blog/scalable-topic-modelling/" />
 <meta property="og:site_name" content="Inverse Entropy" />
+<meta property="og:image" content="https://prrao87.github.io/blog/images/posts/search_document.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-16T00:00:00-06:00" />
 <script type="application/ld+json">
-{"url":"https://prrao87.github.io/blog/categories/","@type":"WebPage","headline":"Tags","description":"A place for data science, machine learning, NLP and other interesting computing topics.","@context":"https://schema.org"}</script>
+{"url":"https://prrao87.github.io/blog/scalable-topic-modelling/","@type":"BlogPosting","headline":"Scalable topic modelling: Comparing Gensim and PySpark","dateModified":"2020-11-16T00:00:00-06:00","datePublished":"2020-11-16T00:00:00-06:00","image":"https://prrao87.github.io/blog/images/posts/search_document.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://prrao87.github.io/blog/scalable-topic-modelling/"},"author":{"@type":"Person","name":"Prashanth Rao"},"description":"Developing a scalable, robust topic modelling process for large document collections in Python","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://prrao87.github.io/blog/feed.xml" title="Inverse Entropy" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -88,130 +92,69 @@ window.onload = wrap_img;
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Scalable topic modelling: Comparing Gensim and PySpark</h1><p class="page-description">Developing a scalable, robust topic modelling process for large document collections in Python</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-11-16T00:00:00-06:00" itemprop="datePublished">
+        Nov 16, 2020
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Prashanth Rao</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/blog/categories/#nlp">nlp</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#scalability">scalability</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#performance">performance</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+</ul><p><img src="./images/posts/search_document.jpg" alt="" title="Source: https://pixabay.com/photos/success-motivation-solutions-600183/"></p>
 
 
-<h2>Contents</h2>
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="prrao87/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'https://prrao87.github.io/blog/scalable-topic-modelling/';
+      this.page.identifier = 'https://prrao87.github.io/blog/scalable-topic-modelling/';
+    };
 
-  
-  
-  
+    (function() {
+      var d = document, s = d.createElement('script');
 
-  <ul>
-  
-    <li><a href="#blogging">blogging</a></li>
-  
-    <li><a href="#dataviz">dataviz</a></li>
-  
-    <li><a href="#fastpages">fastpages</a></li>
-  
-    <li><a href="#learning">learning</a></li>
-  
-    <li><a href="#nlp">nlp</a></li>
-  
-    <li><a href="#performance">performance</a></li>
-  
-    <li><a href="#scalability">scalability</a></li>
-  
-    <li><a href="#spacy">spacy</a></li>
-  
-    <li><a href="#web-app">web-app</a></li>
-  
-  </ul>
+      s.src = 'https://prrao87.disqus.com/embed.js';
 
-  
-      <h3 id ="blogging"><i class="fas fa-tags category-tags-icon"></i></i> blogging</h3>
-      <a name="blogging"></a>
-      
-        <article class="archive-item">
-          <p class="post-meta post-meta-title"><a class="page-meta" href="/blog/blogging-for-data-scientists/">Blogging for Data Scientists: Moving Away from Medium</a>  • May 3, 2020</p>
-        </article>
-        
-      
-  
-      <h3 id ="dataviz"><i class="fas fa-tags category-tags-icon"></i></i> dataviz</h3>
-      <a name="dataviz"></a>
-      
-        <article class="archive-item">
-          <p class="post-meta post-meta-title"><a class="page-meta" href="/blog/lime-explainer-dashboards/">Build a LIME explainer dashboard with the fewest lines of code</a>  • Oct 24, 2020</p>
-        </article>
-        
-      
-  
-      <h3 id ="fastpages"><i class="fas fa-tags category-tags-icon"></i></i> fastpages</h3>
-      <a name="fastpages"></a>
-      
-        <article class="archive-item">
-          <p class="post-meta post-meta-title"><a class="page-meta" href="/blog/blogging-for-data-scientists/">Blogging for Data Scientists: Moving Away from Medium</a>  • May 3, 2020</p>
-        </article>
-        
-      
-  
-      <h3 id ="learning"><i class="fas fa-tags category-tags-icon"></i></i> learning</h3>
-      <a name="learning"></a>
-      
-        <article class="archive-item">
-          <p class="post-meta post-meta-title"><a class="page-meta" href="/blog/blogging-for-data-scientists/">Blogging for Data Scientists: Moving Away from Medium</a>  • May 3, 2020</p>
-        </article>
-        
-      
-  
-      <h3 id ="nlp"><i class="fas fa-tags category-tags-icon"></i></i> nlp</h3>
-      <a name="nlp"></a>
-      
-        
-      
-        <article class="archive-item">
-          <p class="post-meta post-meta-title"><a class="page-meta" href="/blog/lime-explainer-dashboards/">Build a LIME explainer dashboard with the fewest lines of code</a>  • Oct 24, 2020</p>
-        </article>
-        
-      
-        <article class="archive-item">
-          <p class="post-meta post-meta-title"><a class="page-meta" href="/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html">Turbo-charge your spaCy NLP pipeline</a>  • May 2, 2020</p>
-        </article>
-        
-      
-  
-      <h3 id ="performance"><i class="fas fa-tags category-tags-icon"></i></i> performance</h3>
-      <a name="performance"></a>
-      
-        
-      
-        <article class="archive-item">
-          <p class="post-meta post-meta-title"><a class="page-meta" href="/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html">Turbo-charge your spaCy NLP pipeline</a>  • May 2, 2020</p>
-        </article>
-        
-      
-  
-      <h3 id ="scalability"><i class="fas fa-tags category-tags-icon"></i></i> scalability</h3>
-      <a name="scalability"></a>
-      
-        
-      
-  
-      <h3 id ="spacy"><i class="fas fa-tags category-tags-icon"></i></i> spacy</h3>
-      <a name="spacy"></a>
-      
-        <article class="archive-item">
-          <p class="post-meta post-meta-title"><a class="page-meta" href="/blog/spacy/nlp/performance/2020/05/02/spacy-multiprocess.html">Turbo-charge your spaCy NLP pipeline</a>  • May 2, 2020</p>
-        </article>
-        
-      
-  
-      <h3 id ="web-app"><i class="fas fa-tags category-tags-icon"></i></i> web-app</h3>
-      <a name="web-app"></a>
-      
-        <article class="archive-item">
-          <p class="post-meta post-meta-title"><a class="page-meta" href="/blog/lime-explainer-dashboards/">Build a LIME explainer dashboard with the fewest lines of code</a>  • Oct 24, 2020</p>
-        </article>
-        
-      
-  
-
-
-
-
-</div>
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/blog/scalable-topic-modelling/" hidden></a>
+</article>
       </div>
     </main><footer class="site-footer h-card">
   <data class="u-url" href="/blog/"></data>
